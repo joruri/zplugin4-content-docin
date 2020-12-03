@@ -1,0 +1,10 @@
+<table class="cms-detail">
+  <tr>
+    <th><%= @item.class.human_attribute_name :default_concept_id %></th>
+    <td><%= @content.default_concept&.name %></td>
+  </tr>
+  <tr>
+    <th><%= @item.class.human_attribute_name :default_layout_id %></th>
+    <td><%= @content.default_layout&.title %></td>
+  </tr>
+</table>

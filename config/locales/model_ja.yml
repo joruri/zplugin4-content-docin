@@ -1,0 +1,20 @@
+ja:
+  activerecord:
+    models:
+      docin/content/import: 記事取込コンテンツ
+      docin/import: 記事取込
+
+    attributes:
+
+      ## content
+      docin/content/setting:
+        gp_article_content_id: コンテンツ
+        body_template: 本文テンプレート
+        summary_template: 概要テンプレート
+
+  active_hash:
+    attributes:
+      docin/content/setting_menu/title:
+        relation: コンテンツ連携
+        gp_article_relation: 記事
+        

@@ -1,0 +1,25 @@
+<%-
+content = @content.gp_template_content
+templates = content ? content.templates.where(state: 'public') : GpTemplate::Template.none
+-%>
+
+<table class="cms-form">
+  <tr>
+    <th><%= f.label :gp_template_content_template_id %></th>
+    <td><%= f.select :gp_template_content_template_id, @item.class.gp_template_content_template_id_options(site: core.site), include_blank: true %></td>
+  </tr>
+  <tr>
+    <th><%= f.label :template_ids %></th>
+    <td id="article_setting_templates">
+      <%- templates.each do |t| -%>
+      <span>
+        <%= check_box_tag "template_#{t.id}", t.id, @content.templates.include?(t), name: 'item[template_ids][]' -%> <%= label_tag "template_#{t.id}", t.title -%>
+      </span>
+      <%- end -%>
+    </td>
+  </tr>
+  <tr>
+    <th><%= f.label :default_template_id %></th>
+    <td><%= f.collection_select :default_template_id, templates, :id, :title, include_blank: true %></td>
+  </tr>
+</table>

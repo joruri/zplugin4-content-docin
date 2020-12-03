@@ -1,0 +1,14 @@
+<table class="cms-form">
+  <tr>
+    <th><%= f.label :default_concept_id %></th>
+    <td><%= f.select :default_concept_id, core.site.public_concepts.to_tree_options, { include_blank: true },
+                     data: { refresh: [{ target: '#item_default_layout_id', endpoint: cms_api_layouts_path, key: :concept_id}] } %></td>
+  </tr>
+  <tr>
+    <th><%= f.label :default_layout_id %></th>
+    <td>
+      <%= f.select :default_layout_id, Cms::Layout.in_site(core.site).order(:concept_id, :name).map { |i| ["#{i.concept.name} : #{i.title}", i.id] }, include_blank: true %>
+      <div>未設定の場合、記事ディレクトリの設定が記事へ反映されます</div>
+    </td>
+  </tr>
+</table>

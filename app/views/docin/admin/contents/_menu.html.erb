@@ -1,0 +1,6 @@
+<div class="actionMenu">
+<%= link_to '戻る', main_app.sys_plugins_path %>
+<span class="separator"></span>
+<%= link_to 'インストール', { action: :install }, method: :post, data: { confirm: 'プラグインの構成とデータをインストールします。よろしいですか？' } %>
+<%= link_to 'アンインストール', { action: :uninstall }, method: :post, data: { confirm: 'プラグインの構成とデータをアンインストールします。よろしいですか？' } %>
+</div>

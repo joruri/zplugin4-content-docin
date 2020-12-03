@@ -1,0 +1,16 @@
+<table class="cms-detail">
+  <tr>
+    <th>記事コンテンツ</th>
+    <td>
+      <%- if @content.gp_article_content -%>
+        <%= @content.gp_article_content.name %>
+      <%- else -%>
+        <span class="note">インポートする記事コンテンツを設定してください。</span>
+      <%- end -%>
+    </td>
+  </tr>
+  <tr>
+    <th>CSVファイル</th>
+    <td><%= f.file_field :file, required: true %></td>
+  </tr>
+</table>

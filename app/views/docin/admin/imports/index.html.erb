@@ -1,0 +1,6 @@
+<%= form_for :item, url: { action: :create }, html: { method: :post, multipart: true } do |f| %>
+  <%= render 'form', f: f %>
+  <div class="submitters">
+    <%= f.submit '確認する', name: :confirm %>
+  </div>
+<% end %>
