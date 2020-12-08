@@ -10,17 +10,17 @@
 
 プラグイン用ディレクトリを作成し、プラグインのソースをダウンロードします。
 
-    $ /home/joruri
-    $ mkdir plugin
-    $ cd /home/joruri/plugin
-    $ git clone -b feature/sample git@github.com:zomeki/zplugin3-content-docin
+    $ cd /var/www/joruri
+    $ mkdir vendor/plugins
+    $ cd /var/www/joruri/vendor/plugins
+    $ git clone -b master git@github.com:joruri/zplugin3-content-docin
 
 Gemfileを手動で作成し、ダウンロードしたプラグインソースのパスを指定します。
 
     $ cd /var/www/joruri/config/plugins
     $ vi Gemfile
 ```
-gem 'zplugin3-content-docin', path: '/home/joruri/plugin/zplugin3-content-docin'
+gem 'zplugin3-content-docin', path: 'vendor/plugins/zplugin3-content-docin'
 ```
 bundle installを実行します。
 

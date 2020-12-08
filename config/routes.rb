@@ -1,8 +1,9 @@
 Zplugin::Content::Docin::Engine.routes.draw do
-  root 'docin/admin/contents#index'
-  namespace 'docin' do
-    scope module: 'admin' do
-      resources :contents
+  root 'admin/front#index'
+  scope module: 'admin' do
+    resource :front, only: [:index] do
+      match 'install' => 'front#install', via: :post
+      match 'uninstall' => 'front#uninstall', via: :post
     end
   end
 end

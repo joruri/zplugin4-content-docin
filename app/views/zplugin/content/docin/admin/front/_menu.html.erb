@@ -1,0 +1,4 @@
+<div class="cms-action-menu">
+  <%= link_to :install, { action: :install }, method: :post, data: { confirm: :install_plugin } if @policy.install? %>
+  <%= link_to :uninstall, { action: :uninstall }, method: :post, data: { confirm: :uninstall_plugin } if @policy.uninstall? %>
+</div>
