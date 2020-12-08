@@ -1,9 +1,8 @@
-class Docin::Admin::ImportsController < Cms::Admin::BaseController
-  #include Sys::Controller::Scaffold::Base
+class Docin::Admin::ImportsController < Docin::Admin::BaseController
 
   def pre_dispatch
     @content = Docin::Content::Import.find(params[:content])
-    return error_auth unless core.user.has_priv?(:read, concept: @content.concept)
+    @policy = authorize(nil, content: @content)
   end
 
   def index

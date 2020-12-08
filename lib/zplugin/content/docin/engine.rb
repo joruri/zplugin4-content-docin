@@ -3,17 +3,21 @@ module Zplugin
     module Docin
       class Engine < ::Rails::Engine
         engine_name 'zplugin_content_docin'
+        isolate_namespace Zplugin::Content::Docin
 
         config.after_initialize do |app|
-          app.config.x.engines << self
+          app.config.assets.precompile += %w(sample/admin.js sample/public.js)
         end
 
         class << self
+          def version
+            VERSION
+          end
+          
           def install
           end
 
           def uninstall
-            ::Docin::Content::Import.destroy_all
           end
         end
       end
