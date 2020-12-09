@@ -17,7 +17,7 @@
 
 Gemfileを手動で作成し、ダウンロードしたプラグインソースのパスを指定します。
 
-    $ cd /var/www/joruri/config/plugins
+    $ cd /var/www/joruri/vendor/plugins
     $ vi Gemfile
 ```
 gem 'zplugin3-content-docin', path: 'vendor/plugins/zplugin3-content-docin'

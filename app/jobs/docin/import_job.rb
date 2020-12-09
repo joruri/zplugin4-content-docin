@@ -8,8 +8,6 @@ class Docin::ImportJob < ApplicationJob
 
     update_docs(rows)
     close_docs(prev_names - next_names)
-
-    # Cms::RebuildJob.perform_later(content.site, target_content_ids: [content.id])
   end
 
   private
