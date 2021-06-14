@@ -1,8 +1,8 @@
 class Docin::Admin::ImportsController < Docin::Admin::BaseController
 
   def pre_dispatch
-    @content = Docin::Content::Import.find(params[:content])
-    @policy = authorize(nil, content: @content)
+    @content = Docin::Content::Import.in_site(core.site).find(params[:content])
+    @policy = authorize(nil, content: @content, policy: Docin::ImportPolicy)
   end
 
   def index

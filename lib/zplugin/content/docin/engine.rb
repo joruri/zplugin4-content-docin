@@ -18,6 +18,7 @@ module Zplugin
           end
 
           def uninstall
+            ::Docin::Content::Import.destroy_all
           end
         end
       end

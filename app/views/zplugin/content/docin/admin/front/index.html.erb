@@ -1,6 +1,6 @@
 <%= page_entries_info @items %>
 
-<table class="cms-list">
+<table class="cms-list" data-controller="basic-list">
   <thead>
     <tr>
       <th class="cms-list__id"><%= Cms::Content.human_attribute_name :serial_no %></th>
@@ -11,7 +11,7 @@
   </thead>
   <tbody>
     <%- @items.each do |item| -%>
-      <tr>
+      <tr data-href="<%= item.admin_content_uri %>" >
         <td class="cms-list__id"><%= item.serial_no %></td>
         <td class="cms-list__content-id"><%= item.code %></td>
         <td class="cms-list__content"><%= item.name %></td>
