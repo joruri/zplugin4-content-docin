@@ -4,28 +4,24 @@
 
 ## 想定環境
 
-* Joruri CMS 2020 Release 0+
+| zplugin-content-docin | zomeki | joruri |
+| ---- | ---- | ---- |
+| 2.0 | - | 2020 Release 1 |
 
 ## インストール
 
-プラグイン用ディレクトリを作成し、プラグインのソースをダウンロードします。
+Joruri CMS 2020管理画面にアクセスし、下記のプラグインをインストール
 
-    $ cd /var/www/joruri
-    $ mkdir vendor/plugins
-    $ cd /var/www/joruri/vendor/plugins
-    $ git clone -b master git@github.com:joruri/zplugin3-content-docin
+* https://github.com/joruri/zplugin4-content-docin
 
-Gemfileを手動で作成し、ダウンロードしたプラグインソースのパスを指定します。
+ツール　＞　プラグイン　＞　作成から下記の内容を登録する。
 
-    $ cd /var/www/joruri/vendor/plugins
-    $ vi Gemfile
-```
-gem 'zplugin3-content-docin', path: 'vendor/plugins/zplugin3-content-docin'
-```
-bundle installを実行します。
-
-    $ cd /var/www/joruri
-    $ bundle install
+|項目名|設定値|
+|:----------|:---------------|
+|タイトル|記事取込|
+|プラグイン名|zplugin4-content-docin|
+|ロケーション|https://github.com/joruri/|
+|バージョン|branch/master|
 
 ## License
 

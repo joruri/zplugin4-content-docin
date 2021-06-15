@@ -5,11 +5,11 @@ require "zplugin/content/docin/version"
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
-  s.name        = "zplugin3-content-docin"
+  s.name        = "zplugin4-content-docin"
   s.version     = Zplugin::Content::Docin::VERSION
   s.authors     = ["SiteBridge Inc."]
   s.email       = ["info@sitebridge.co.jp"]
-  s.homepage    = "https://github.com/joruri/zplugin3-content-docin"
+  s.homepage    = "https://github.com/joruri/zplugin4-content-docin"
   s.summary     = "Import csv data into gp_article contents"
   s.description = "Import csv data into gp_article contents"
   s.license     = "MIT"
