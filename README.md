@@ -12,14 +12,14 @@
 
 Joruri CMS 2020管理画面にアクセスし、下記のプラグインをインストール
 
-* https://github.com/joruri/zplugin3-content-docin
+* https://github.com/joruri/zplugin4-content-docin
 
 ツール　＞　プラグイン　＞　作成から下記の内容を登録する。
 
 |項目名|設定値|
 |:----------|:---------------|
 |タイトル|記事取込|
-|プラグイン名|zplugin3-content-docin|
+|プラグイン名|zplugin4-content-docin|
 |ロケーション|https://github.com/joruri/|
 |バージョン|branch/master|
 
