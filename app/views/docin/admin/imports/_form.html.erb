@@ -1,11 +1,11 @@
-<table class="cms-detail">
+<table class="cms-form">
   <tr>
     <th>記事コンテンツ</th>
     <td>
       <%- if @content.gp_article_content -%>
         <%= @content.gp_article_content.name %>
       <%- else -%>
-        <span class="note">インポートする記事コンテンツを設定してください。</span>
+        <span class="util-note">インポートする記事コンテンツを設定してください。</span>
       <%- end -%>
     </td>
   </tr>

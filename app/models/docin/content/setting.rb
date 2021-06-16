@@ -12,13 +12,14 @@ class Docin::Content::Setting < Cms::ContentSetting
     gp_article_content&.name
   end
 
-private
+  private
 
-class << self
+  class << self
 
-  def gp_article_content_id_options(options = {})
-    GpArticle::Content::Doc.in_site(options[:site]).map { |c| [c.name, c.id] }
+    def gp_article_content_id_options(options = {})
+      GpArticle::Content::Doc.in_site(options[:site]).map { |c| [c.name, c.id] }
+    end
+
   end
-end
 
 end
