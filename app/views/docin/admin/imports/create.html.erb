@@ -1,38 +1,42 @@
 <%- if @rows.any? { |row| row.doc.errors.present? } -%>
-<div class="notice">エラーが検出されました。エラーの内容を確認してCSVファイルを修正し再度インポートしてください。</div>
+<div class="util-notice">エラーが検出されました。エラーの内容を確認してCSVファイルを修正し再度インポートしてください。</div>
 <%- else -%>
-<div class="notice">インポートする内容を確認し、画面下部にある「登録する」ボタンを押してください。</div>
+<div class="util-notice">インポートする内容を確認し、画面下部にある「登録する」ボタンを押してください。</div>
 <%- end -%>
 <%= form_for :item, url: { action: :create }, html: { method: :post, multipart: true } do |f| %>
   <table class="cms-list">
-    <tr>
-      <th style="width: 50px;"><%= Docin::Row::NO %></th>
-      <th style="width: 100px;"><%= Docin::Row::NAME %></th>
-      <th style="width: 250px;"><%= Docin::Row::TITLE %></th>
-      <th style="width: 120px;"><%= Docin::Row::LAT %></th>
-      <th style="width: 120px;"><%= Docin::Row::LNG %></th>
-      <th style="width: 250px;">カテゴリ</th>
-      <th>エラー</th>
-    </tr>
-    <%- @rows.each do |row| -%>
-    <tr class="<%= cycle '', 'cycle' %>">
-      <td><%= row.no %></td>
-      <td><%= row.name %></td>
-      <td><%= row.title %></td>
-      <td><%= row.lat %></td>
-      <td><%= row.lng %></td>
-      <td><%= row.category_titles.join(', ') %></td>
-      <td>
-        <%- if row.doc.errors.present? -%>
-          <span class="note"><%=hbr row.doc.errors.full_messages.to_a.join("\n") -%></span>
-        <%- end -%>
-      </td>
-    </tr>
-    <%- end -%>
+    <thead>
+      <tr>
+        <th style="width: 50px;"><%= Docin::Row::NO %></th>
+        <th style="width: 100px;"><%= Docin::Row::NAME %></th>
+        <th style="width: 250px;"><%= Docin::Row::TITLE %></th>
+        <th style="width: 120px;"><%= Docin::Row::LAT %></th>
+        <th style="width: 120px;"><%= Docin::Row::LNG %></th>
+        <th style="width: 250px;">カテゴリ</th>
+        <th>エラー</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%- @rows.each do |row| -%>
+        <tr>
+          <td><%= row.no %></td>
+          <td><%= row.name %></td>
+          <td><%= row.title %></td>
+          <td><%= row.lat %></td>
+          <td><%= row.lng %></td>
+          <td><%= row.category_titles.join(', ') %></td>
+          <td>
+            <%- if row.doc.errors.present? -%>
+              <span class="note"><%=hbr row.doc.errors.full_messages.to_a.join("\n") -%></span>
+            <%- end -%>
+          </td>
+        </tr>
+      <%- end -%>
+    </tbody>
   </table>
 
   <%= f.hidden_field :csv, value: @csv %>
-  <div class="submitters">
+  <div class="cms-submitters">
     <%= f.submit '登録する', name: :register, data: { confirm: '登録してよろしいですか？' } %>
   </div>
 <% end %>
