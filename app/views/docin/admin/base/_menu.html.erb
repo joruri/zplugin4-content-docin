@@ -4,5 +4,5 @@
 
 <ul class="sys-navi__content-menu">
 <%= content_tag('li') { link_to 'インポート', docin_imports_path, class: content_menu_class(controller_name == 'imports') } -%>
-<%= content_tag('li') { link_to 'インポート設定', docin_content_settings_path, class: content_menu_class(controller_name == 'settings') } if policy(@content).edit? -%>
+<%= content_tag('li') { link_to '設定', docin_content_settings_path, class: content_menu_class(controller_name == 'settings') } if policy(@content).edit? -%>
 </ul>
