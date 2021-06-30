@@ -1,0 +1,5 @@
+ja:
+  service:
+    paths:
+      zplugin/content/docin/navi/front: プラグイン
+      docin/navi/imports: インポート
