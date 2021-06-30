@@ -9,5 +9,4 @@ class Zplugin::Content::Docin::Admin::FrontController < Cms::Admin::BaseControll
                                     .paginate(page: params[:page], per_page: params[:limit])
     _index @items
   end
-
 end

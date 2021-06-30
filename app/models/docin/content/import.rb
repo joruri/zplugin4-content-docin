@@ -15,5 +15,4 @@ class Docin::Content::Import < Cms::Content
   def summary_template
     setting.summary_template.to_s
   end
-
 end

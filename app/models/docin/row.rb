@@ -1,5 +1,4 @@
 class Docin::Row < ApplicationModel
-
   attr_accessor :data
   attr_accessor :doc
 
