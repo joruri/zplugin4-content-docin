@@ -1,3 +1,3 @@
 class Docin::ImportPolicy < ApplicationPolicy
-  include Cms::Base::Designer::ContentPolicy
+  chain Cms::Chain::Designer::ContentPolicy
 end
