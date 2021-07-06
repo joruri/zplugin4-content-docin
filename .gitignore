@@ -1,0 +1,10 @@
+.project
+.bundle/
+Gemfile.lock
+log/*.log
+node_modules/
+pkg/
+spec/dummy/db/*.sqlite3
+spec/dummy/db/*.sqlite3-journal
+spec/dummy/log/*.log
+spec/dummy/tmp/
