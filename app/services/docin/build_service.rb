@@ -4,7 +4,9 @@ class Docin::BuildService < ApplicationService
     @user = user
 
     @dest_content = @content.gp_article_content
-    @categories = @dest_content.category_types.flat_map(&:categories)
+    @category_types = @dest_content.category_types.map do |category_type|
+                        [category_type.title, category_type.categories]
+                      end.to_h
 
     @body_template = Erubis::Eruby.new(@content.body_template)
     @summary_template = Erubis::Eruby.new(@content.summary_template)
@@ -46,7 +48,13 @@ class Docin::BuildService < ApplicationService
   private
 
   def build_categories(doc, row)
-    categories = @categories.select { |category| category.title.in?(row.category_titles) }
+    categories = @category_types.keys.each_with_object([]) do |title, categories|
+                   category_title = row.category_title(title)
+                   next if category_title.blank?
+                   category = @category_types[title].find { |category| category.title == category_title }
+                   categories << category if category.present?
+                 end
+    row.category_titles = categories.pluck(:title)
 
     doc.categorizations.each do |c|
       if c.categorized_as == 'GpArticle::Doc' && !categories.include?(c.category)

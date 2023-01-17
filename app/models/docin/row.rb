@@ -1,12 +1,12 @@
 class Docin::Row < ApplicationModel
   attr_accessor :data
   attr_accessor :doc
+  attr_accessor :category_titles
 
   NAME = 'ディレクトリ名'
   TITLE = 'タイトル'
   MARKER_SORT_NO = 'マップ一覧順'
   MAP_COORDINATE = '座標'
-  CATS = ['区分', '分野', 'ライフイベント', 'イベント情報']
 
   def state
     'public'
@@ -36,8 +36,8 @@ class Docin::Row < ApplicationModel
     data[MAP_COORDINATE].split(/,|、/).last
   end
 
-  def category_titles
-    CATS.map { |k| data[k] }.select(&:present?)
+  def category_title(category_type_title)
+    data[category_type_title]
   end
 
   def validate
