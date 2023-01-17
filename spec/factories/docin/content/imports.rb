@@ -13,6 +13,5 @@ FactoryBot.define do
         item.setting.save
       end
     end
-
-  end  
+  end
 end
