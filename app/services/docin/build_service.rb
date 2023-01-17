@@ -28,10 +28,16 @@ class Docin::BuildService < ApplicationService
     doc.marker_sort_no = row.marker_sort_no
     doc.navigation_state = 'enabled'
 
-    # creator
-    doc.build_creator unless doc.creator
-    doc.creator.user = @user
-    doc.creator.group = @user.group
+    # creator editor
+    if doc.creator.blank?
+      doc.build_creator
+      doc.creator.user = @user
+      doc.creator.group = @user.group
+    else
+      doc.build_editor if doc.editor.blank?
+      doc.editor.user = @user
+      doc.editor.group = @user.group
+    end
 
     # map
     build_map(doc, row)
