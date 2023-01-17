@@ -8,11 +8,10 @@
   <table class="cms-list">
     <thead>
       <tr>
-        <th style="width: 50px;"><%= Docin::Row::NO %></th>
         <th style="width: 100px;"><%= Docin::Row::NAME %></th>
         <th style="width: 250px;"><%= Docin::Row::TITLE %></th>
-        <th style="width: 120px;"><%= Docin::Row::LAT %></th>
-        <th style="width: 120px;"><%= Docin::Row::LNG %></th>
+        <th style="width: 50px;"><%= Docin::Row::MARKER_SORT_NO %></th>
+        <th style="width: 120px;"><%= Docin::Row::MAP_COORDINATE %></th>
         <th style="width: 250px;">カテゴリ</th>
         <th>エラー</th>
       </tr>
@@ -20,11 +19,10 @@
     <tbody>
       <%- @rows.each do |row| -%>
         <tr>
-          <td><%= row.no %></td>
           <td><%= row.name %></td>
           <td><%= row.title %></td>
-          <td><%= row.lat %></td>
-          <td><%= row.lng %></td>
+          <td><%= row.marker_sort_no %></td>
+          <td><%= row.map_coordinate %></td>
           <td><%= row.category_titles.join(', ') %></td>
           <td>
             <%- if row.doc.errors.present? -%>

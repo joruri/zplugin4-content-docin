@@ -23,7 +23,7 @@ class Docin::BuildService < ApplicationService
     doc.recognized_at = Time.now
     doc.qrcode_state = 'visible'
     doc.marker_state = 'visible'
-    doc.marker_sort_no = row.no
+    doc.marker_sort_no = row.marker_sort_no
     doc.navigation_state = 'enabled'
 
     # creator
@@ -66,13 +66,13 @@ class Docin::BuildService < ApplicationService
 
     map = doc.maps[0]
     map.name = '1'
-    map.map_lat = row.lat
-    map.map_lng = row.lng
+    map.map_lat = row.map_lat
+    map.map_lng = row.map_lng
     map.map_zoom = 14
 
     marker = map.markers[0] || map.markers.build
     marker.name = row.title
-    marker.lat = row.lat
-    marker.lng = row.lng
+    marker.lat = row.map_lat
+    marker.lng = row.map_lng
   end
 end
