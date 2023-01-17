@@ -13,17 +13,26 @@
         <th style="width: 50px;"><%= Docin::Row::MARKER_SORT_NO %></th>
         <th style="width: 120px;"><%= Docin::Row::MAP_COORDINATE %></th>
         <th style="width: 250px;">カテゴリ</th>
+        <th style="width: 250px;"><%= Docin::Row::FILE_PATH %></th>
+        <th style="width: 250px;"><%= Docin::Row::FILE_TITLE %></th>
+        <th style="width: 250px;"><%= Docin::Row::FILE_ALT_TEXT %></th>
+        <th style="width: 250px;"><%= Docin::Row::FILE_IMAGE_RESIZE %></th>
         <th>エラー</th>
       </tr>
     </thead>
     <tbody>
       <%- @rows.each do |row| -%>
+        <%- file = row.doc.files.reject { |file| file.marked_for_destruction? }.first -%>
         <tr>
           <td><%= row.name %></td>
           <td><%= row.title %></td>
           <td><%= row.marker_sort_no %></td>
           <td><%= row.map_coordinate %></td>
           <td><%= row.category_titles.join(', ') %></td>
+          <td><%= file&.name %></td>
+          <td><%= file&.title %></td>
+          <td><%= file&.alt_text %></td>
+          <td><%= file&.image_resize %></td>
           <td>
             <%- if row.doc.errors.present? -%>
               <span class="note"><%=hbr row.doc.errors.full_messages.to_a.join("\n") -%></span>

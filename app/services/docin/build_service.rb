@@ -45,6 +45,9 @@ class Docin::BuildService < ApplicationService
     # category
     build_categories(doc, row)
 
+    # file
+    build_file(doc, row)
+
     doc.in_ignore_accessibility_check = '1'
     doc.in_ignore_link_check = '1'
 
@@ -88,5 +91,32 @@ class Docin::BuildService < ApplicationService
     marker.name = row.title
     marker.lat = row.map_lat
     marker.lng = row.map_lng
+  end
+
+  def build_file(doc, row)
+    if row.file_path.present?
+      path = File.join(@content.site.public_path, row.file_path).to_s
+      return unless File.exist?(path)
+
+      doc.files.build if doc.files.blank?
+      file = doc.files[0]
+      file.file = ActionDispatch::TempFile.create_from_path(path)
+      file.site_id = @content.site_id
+      file.name = row.file_name
+      file.title = row.file_title
+      file.alt_text = row.file_alt_text
+      file.image_resize = row.file_image_resize.presence || @dest_content.setting.attachment_resize_size
+      if file.creator.blank?
+        file.build_creator
+        file.creator.user = doc.creator.user
+        file.creator.group = doc.creator.group
+      else
+        file.build_editor if file.editor.blank?
+        file.editor.user = doc.editor.user
+        file.editor.group = doc.editor.group
+      end
+    else
+      doc.files.each { |file| file.mark_for_destruction }
+    end
   end
 end
