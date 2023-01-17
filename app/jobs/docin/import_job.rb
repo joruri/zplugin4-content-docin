@@ -17,7 +17,9 @@ class Docin::ImportJob < ApplicationJob
       row.doc.categorizations.each do |c|
         c.destroy if c.marked_for_destruction?
       end
-      row.doc.save
+      if row.doc.save
+        Cms::PublicateInteractor.call(item: row.doc)
+      end
     end
   end
 
