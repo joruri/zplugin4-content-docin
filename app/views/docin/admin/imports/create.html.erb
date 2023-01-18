@@ -13,9 +13,11 @@
         <th style="width: 250px;"><%= Docin::Row::TITLE %></th>
         <th style="width: 100px;"><%= Docin::Row::FEATURE_1 %></th>
         <th style="width: 120px;"><%= Docin::Row::FEED_STATE %></th>
+        <th style="width: 250px;">カテゴリ</th>
+        <th style="width: 180px;"><%= Docin::Row::DISPLAY_PUBLISHED_AT %></th>
+        <th style="width: 180px;"><%= Docin::Row::DISPLAY_UPDATED_AT %></th>
         <th style="width: 50px;"><%= Docin::Row::MARKER_SORT_NO %></th>
         <th style="width: 120px;"><%= Docin::Row::MAP_COORDINATE %></th>
-        <th style="width: 250px;">カテゴリ</th>
         <th style="width: 250px;"><%= Docin::Row::FILE_PATH %></th>
         <th style="width: 250px;"><%= Docin::Row::FILE_TITLE %></th>
         <th style="width: 250px;"><%= Docin::Row::FILE_ALT_TEXT %></th>
@@ -32,9 +34,11 @@
           <td><%= row.title %></td>
           <td><%= row.feature_1_text %></td>
           <td><%= row.feed_state_text %></td>
+          <td><%= row.category_titles.join(', ') %></td>
+          <td><%=l row.display_published_at %></td>
+          <td><%=l row.display_updated_at %></td>
           <td><%= row.marker_sort_no %></td>
           <td><%= row.map_coordinate %></td>
-          <td><%= row.category_titles.join(', ') %></td>
           <td><%= file&.name %></td>
           <td><%= file&.title %></td>
           <td><%= file&.alt_text %></td>

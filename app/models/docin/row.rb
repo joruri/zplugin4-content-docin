@@ -8,6 +8,8 @@ class Docin::Row < ApplicationModel
   TITLE = 'タイトル'
   FEATURE_1 = '記事一覧表示'
   FEED_STATE = '記事フィード表示'
+  DISPLAY_PUBLISHED_AT = '公開日（表示用）'
+  DISPLAY_UPDATED_AT = '更新日（表示用）'
   MARKER_SORT_NO = 'マップ一覧順'
   MAP_COORDINATE = '座標'
   FILE_PATH = '添付ファイル'
@@ -51,6 +53,20 @@ class Docin::Row < ApplicationModel
 
   def feed_state_text
     feed_state_option.first
+  end
+
+  def display_published_at
+    return if data[DISPLAY_PUBLISHED_AT].blank?
+    Time.parse(data[DISPLAY_PUBLISHED_AT]) rescue nil
+  end
+
+  def display_updated_at
+    return if data[DISPLAY_UPDATED_AT].blank?
+    Time.parse(data[DISPLAY_UPDATED_AT]) rescue nil
+  end
+
+  def keep_display_updated_at
+    !display_updated_at.nil?
   end
 
   def map_exist?

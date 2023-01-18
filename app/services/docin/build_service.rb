@@ -20,8 +20,9 @@ class Docin::BuildService < ApplicationService
     doc.body = @body_template.evaluate(data: row.data)
     doc.summary = @summary_template.evaluate(data: row.data)
     doc.concept = @dest_content.concept
-    doc.display_updated_at = Time.now
-    doc.display_published_at ||= Time.now
+    doc.display_updated_at = row.display_updated_at unless row.display_updated_at.nil?
+    doc.display_published_at = row.display_published_at unless row.display_published_at.nil?
+    doc.keep_display_updated_at = row.keep_display_updated_at
     doc.recognized_at = Time.now
     doc.qrcode_state = 'visible'
     doc.marker_state = 'visible'
