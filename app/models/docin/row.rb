@@ -12,6 +12,7 @@ class Docin::Row < ApplicationModel
   DISPLAY_UPDATED_AT = '更新日（表示用）'
   TASK_PUBLISH_PROCESS_AT = '公開開始日時'
   TASK_CLOSE_PROCESS_AT = '公開終了日時'
+  INQUIRY_STATE = '連絡先表示'
   MARKER_SORT_NO = 'マップ一覧順'
   MAP_COORDINATE = '座標'
   FILE_PATH = '添付ファイル'
@@ -79,6 +80,14 @@ class Docin::Row < ApplicationModel
   def task_close_process_at
     return if data[TASK_CLOSE_PROCESS_AT].blank?
     Time.parse(data[TASK_CLOSE_PROCESS_AT]) rescue nil
+  end
+
+  def inquiry_state
+    inquiry_state_option.last
+  end
+
+  def inquiry_state_text
+    inquiry_state_option.first
   end
 
   def map_exist?
@@ -162,5 +171,10 @@ class Docin::Row < ApplicationModel
   def feed_state_option
     return [] if data[FEED_STATE].blank?
     GpArticle::Doc.feed_state_options.assoc(data[FEED_STATE]).presence || []
+  end
+
+  def inquiry_state_option
+    return [] if data[INQUIRY_STATE].blank?
+    Cms::Inquiry.state_options.assoc(data[INQUIRY_STATE]).presence || []
   end
 end

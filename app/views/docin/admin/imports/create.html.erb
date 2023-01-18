@@ -18,6 +18,7 @@
         <th style="width: 180px;"><%= Docin::Row::DISPLAY_UPDATED_AT %></th>
         <th style="width: 180px;"><%= Docin::Row::TASK_PUBLISH_PROCESS_AT %></th>
         <th style="width: 180px;"><%= Docin::Row::TASK_CLOSE_PROCESS_AT %></th>
+        <th style="width: 120px;"><%= Docin::Row::INQUIRY_STATE %></th>
         <th style="width: 50px;"><%= Docin::Row::MARKER_SORT_NO %></th>
         <th style="width: 120px;"><%= Docin::Row::MAP_COORDINATE %></th>
         <th style="width: 250px;"><%= Docin::Row::FILE_PATH %></th>
@@ -41,6 +42,7 @@
           <td><%=l row.display_updated_at %></td>
           <td><%=l row.task_publish_process_at %></td>
           <td><%=l row.task_close_process_at %></td>
+          <td><%= row.inquiry_state_text %></td>
           <td><%= row.marker_sort_no %></td>
           <td><%= row.map_coordinate %></td>
           <td><%= file&.name %></td>

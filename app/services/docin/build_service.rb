@@ -43,6 +43,9 @@ class Docin::BuildService < ApplicationService
       doc.editor.group = @user.group
     end
 
+    # inquiry
+    build_inquiries(doc, row)
+
     # map
     build_map(doc, row)
 
@@ -73,6 +76,18 @@ class Docin::BuildService < ApplicationService
         process_at: row.task_close_process_at
       }
    }
+  end
+
+  def build_inquiries(doc, row)
+    if doc.inquiries.blank?
+      doc.inquiries.build
+      inquiry = doc.inquiries[0]
+      inquiry.group = doc.creator.group
+    end
+
+    doc.inquiries.each do |inquiry|
+      inquiry.state = row.inquiry_state unless row.inquiry_state.nil?
+    end
   end
 
   def build_categories(doc, row)
