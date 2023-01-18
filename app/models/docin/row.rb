@@ -35,6 +35,10 @@ class Docin::Row < ApplicationModel
     data[TITLE]
   end
 
+  def map_exist?
+    map_lat.present? && map_lng.present?
+  end
+
   def marker_sort_no
     data[MARKER_SORT_NO]
   end
@@ -44,11 +48,11 @@ class Docin::Row < ApplicationModel
   end
 
   def map_lat
-    data[MAP_COORDINATE].split(/,|、/).first
+    map_coordinates.first
   end
 
   def map_lng
-    data[MAP_COORDINATE].split(/,|、/).last
+    map_coordinates.last
   end
 
   def category_title(category_type_title)
@@ -90,6 +94,11 @@ class Docin::Row < ApplicationModel
   end
 
   private
+
+  def map_coordinates
+    return [] if map_coordinate.blank?
+    " #{map_coordinate} ".split(/,|、/).map(&:strip)
+  end
 
   def state_option
     return [] unless %w(下書き 公開 公開終了).include?(data[STATE])

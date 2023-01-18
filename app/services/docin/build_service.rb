@@ -79,18 +79,27 @@ class Docin::BuildService < ApplicationService
   end
 
   def build_map(doc, row)
-    doc.maps.build if doc.maps.blank?
+    if row.map_exist?
+      doc.maps.build if doc.maps.blank?
 
-    map = doc.maps[0]
-    map.name = '1'
-    map.map_lat = row.map_lat
-    map.map_lng = row.map_lng
-    map.map_zoom = 14
+      map = doc.maps[0]
+      map.name = '1'
+      map.map_lat = row.map_lat
+      map.map_lng = row.map_lng
+      map.map_zoom = 14
 
-    marker = map.markers[0] || map.markers.build
-    marker.name = row.title
-    marker.lat = row.map_lat
-    marker.lng = row.map_lng
+      marker = map.markers[0] || map.markers.build
+      marker.name = row.title
+      marker.lat = row.map_lat
+      marker.lng = row.map_lng
+    else
+      doc.maps.each do |map|
+        map.mark_for_destruction
+        map.markers.each do |marker|
+          marker.mark_for_destruction
+        end
+      end
+    end
   end
 
   def build_file(doc, row)

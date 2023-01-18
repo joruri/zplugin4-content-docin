@@ -21,6 +21,12 @@ class Docin::ImportJob < Sys::ProcessJob
     row.doc.categorizations.each do |c|
       c.destroy if c.marked_for_destruction?
     end
+    row.doc.maps.each do |map|
+      map.markers.each do |marker|
+        marker.destroy if marker.marked_for_destruction?
+      end
+      map.destroy if map.marked_for_destruction?
+    end
     row.doc.files.each do |file|
       file.destroy if file.marked_for_destruction?
     end
