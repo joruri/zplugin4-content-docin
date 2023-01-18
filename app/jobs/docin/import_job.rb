@@ -1,13 +1,7 @@
 class Docin::ImportJob < ApplicationJob
   def perform(content, user, csv)
-    @dest_content = content.gp_article_content
-
     rows = Docin::ParseService.new(content, user).parse(csv)
-    prev_names = @dest_content.docs.group(:name).pluck(:name)
-    next_names = rows.map(&:name)
-
     update_docs(rows)
-    close_docs(prev_names - next_names)
   end
 
   private
@@ -23,12 +17,6 @@ class Docin::ImportJob < ApplicationJob
       if row.doc.save
         Cms::PublicateInteractor.call(item: row.doc)
       end
-    end
-  end
-
-  def close_docs(names)
-    @dest_content.docs.where(name: names).order(:id).each do |doc|
-      doc.close
     end
   end
 end
