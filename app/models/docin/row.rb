@@ -4,6 +4,7 @@ class Docin::Row < ApplicationModel
   attr_accessor :category_titles
 
   NAME = 'ディレクトリ名'
+  STATE = '状態'
   TITLE = 'タイトル'
   MARKER_SORT_NO = 'マップ一覧順'
   MAP_COORDINATE = '座標'
@@ -19,7 +20,11 @@ class Docin::Row < ApplicationModel
   end
 
   def state
-    'public'
+    state_option.last
+  end
+
+  def state_text
+    state_option.first
   end
 
   def name
@@ -76,5 +81,18 @@ class Docin::Row < ApplicationModel
     if doc.name.blank?
       doc.errors.add(:base, "#{NAME}を入力してください。")
     end
+    if doc.state_draft? && doc.state_was == 'public'
+      doc.errors.add(:base, "#{STATE}は公開から下書きに変更できません。")
+    end
+    if doc.state_closed? && doc.state_was == 'draft'
+      doc.errors.add(:base, "#{STATE}は下書きから公開終了に変更できません。")
+    end
+  end
+
+  private
+
+  def state_option
+    return [] unless %w(下書き 公開 公開終了).include?(data[STATE])
+    GpArticle::Doc.state_options.assoc(data[STATE]).presence || []
   end
 end
