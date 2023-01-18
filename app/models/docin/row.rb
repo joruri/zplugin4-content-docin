@@ -6,6 +6,8 @@ class Docin::Row < ApplicationModel
   NAME = 'ディレクトリ名'
   STATE = '状態'
   TITLE = 'タイトル'
+  FEATURE_1 = '記事一覧表示'
+  FEED_STATE = '記事フィード表示'
   MARKER_SORT_NO = 'マップ一覧順'
   MAP_COORDINATE = '座標'
   FILE_PATH = '添付ファイル'
@@ -33,6 +35,22 @@ class Docin::Row < ApplicationModel
 
   def title
     data[TITLE]
+  end
+
+  def feature_1
+    feature_1_option.last
+  end
+
+  def feature_1_text
+    feature_1_option.first
+  end
+
+  def feed_state
+    feed_state_option.last
+  end
+
+  def feed_state_text
+    feed_state_option.first
   end
 
   def map_exist?
@@ -103,5 +121,15 @@ class Docin::Row < ApplicationModel
   def state_option
     return [] unless %w(下書き 公開 公開終了).include?(data[STATE])
     GpArticle::Doc.state_options.assoc(data[STATE]).presence || []
+  end
+
+  def feature_1_option
+    return [] if data[FEATURE_1].blank?
+    GpArticle::Doc.feature_1_options.assoc(data[FEATURE_1]).presence || []
+  end
+
+  def feed_state_option
+    return [] if data[FEED_STATE].blank?
+    GpArticle::Doc.feed_state_options.assoc(data[FEED_STATE]).presence || []
   end
 end

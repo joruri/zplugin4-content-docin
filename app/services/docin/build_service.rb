@@ -27,6 +27,8 @@ class Docin::BuildService < ApplicationService
     doc.marker_state = 'visible'
     doc.marker_sort_no = row.marker_sort_no
     doc.navigation_state = 'enabled'
+    doc.feature_1 = row.feature_1 unless row.feature_1.nil?
+    doc.feed_state = row.feed_state unless row.feed_state.nil?
 
     # creator editor
     if doc.creator.blank?

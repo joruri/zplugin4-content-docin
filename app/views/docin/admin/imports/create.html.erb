@@ -11,6 +11,8 @@
         <th style="width: 100px;"><%= Docin::Row::NAME %></th>
         <th style="width: 80px;"><%= Docin::Row::STATE %></th>
         <th style="width: 250px;"><%= Docin::Row::TITLE %></th>
+        <th style="width: 100px;"><%= Docin::Row::FEATURE_1 %></th>
+        <th style="width: 120px;"><%= Docin::Row::FEED_STATE %></th>
         <th style="width: 50px;"><%= Docin::Row::MARKER_SORT_NO %></th>
         <th style="width: 120px;"><%= Docin::Row::MAP_COORDINATE %></th>
         <th style="width: 250px;">カテゴリ</th>
@@ -28,6 +30,8 @@
           <td><%= row.name %></td>
           <td><%= row.state_text %></td>
           <td><%= row.title %></td>
+          <td><%= row.feature_1_text %></td>
+          <td><%= row.feed_state_text %></td>
           <td><%= row.marker_sort_no %></td>
           <td><%= row.map_coordinate %></td>
           <td><%= row.category_titles.join(', ') %></td>
