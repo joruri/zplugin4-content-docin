@@ -26,7 +26,7 @@ class Docin::Admin::ImportsController < Docin::Admin::BaseController
   end
 
   def register
-    Docin::ImportJob.perform_now(@content, core.user, params[:item][:csv])
-    return redirect_to url_for(action: :index), notice: "CSVファイルのインポートが完了しました。"
+    Docin::ImportJob.perform_later(@content, user: core.user, csv: params[:item][:csv])
+    return redirect_to url_for(action: :index), notice: "CSVファイルのインポートを開始しました。"
   end
 end

@@ -9,11 +9,17 @@ module Zplugin
           app.config.assets.precompile += %w(sample/admin.js sample/public.js)
         end
 
+        config.to_prepare do
+          Dir.glob(Zplugin::Content::Docin::Engine.root.join("app/overrides/**/*_override.rb")).each do |c|
+            require_dependency(c)
+          end
+        end
+
         class << self
           def version
             VERSION
           end
-          
+
           def install
           end
 
