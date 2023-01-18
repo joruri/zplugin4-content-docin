@@ -23,6 +23,7 @@ class Docin::BuildService < ApplicationService
     doc.display_updated_at = row.display_updated_at unless row.display_updated_at.nil?
     doc.display_published_at = row.display_published_at unless row.display_published_at.nil?
     doc.keep_display_updated_at = row.keep_display_updated_at
+    doc.tasks_attributes = tasks_attributes(doc, row)
     doc.recognized_at = Time.now
     doc.qrcode_state = 'visible'
     doc.marker_state = 'visible'
@@ -58,6 +59,21 @@ class Docin::BuildService < ApplicationService
   end
 
   private
+
+  def tasks_attributes(doc, row)
+    {
+      '0': {
+        id: doc.task_for(:publish)&.id,
+        name: 'publish',
+        process_at: row.task_publish_process_at
+      },
+      '1': {
+        id: doc.task_for(:close)&.id,
+        name: 'close',
+        process_at: row.task_close_process_at
+      }
+   }
+  end
 
   def build_categories(doc, row)
     categories = @category_types.keys.each_with_object([]) do |title, categories|

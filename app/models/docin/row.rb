@@ -10,6 +10,8 @@ class Docin::Row < ApplicationModel
   FEED_STATE = '記事フィード表示'
   DISPLAY_PUBLISHED_AT = '公開日（表示用）'
   DISPLAY_UPDATED_AT = '更新日（表示用）'
+  TASK_PUBLISH_PROCESS_AT = '公開開始日時'
+  TASK_CLOSE_PROCESS_AT = '公開終了日時'
   MARKER_SORT_NO = 'マップ一覧順'
   MAP_COORDINATE = '座標'
   FILE_PATH = '添付ファイル'
@@ -69,6 +71,16 @@ class Docin::Row < ApplicationModel
     !display_updated_at.nil?
   end
 
+  def task_publish_process_at
+    return if data[TASK_PUBLISH_PROCESS_AT].blank?
+    Time.parse(data[TASK_PUBLISH_PROCESS_AT]) rescue nil
+  end
+
+  def task_close_process_at
+    return if data[TASK_CLOSE_PROCESS_AT].blank?
+    Time.parse(data[TASK_CLOSE_PROCESS_AT]) rescue nil
+  end
+
   def map_exist?
     map_lat.present? && map_lng.present?
   end
@@ -122,6 +134,9 @@ class Docin::Row < ApplicationModel
     if doc.state_draft? && doc.state_was == 'public'
       doc.errors.add(:base, "#{STATE}は公開から下書きに変更できません。")
     end
+    if doc.state_prepared? && doc.state_was == 'public'
+      doc.errors.add(:base, "#{STATE}は公開から公開日時待ちに変更できません。")
+    end
     if doc.state_closed? && doc.state_was == 'draft'
       doc.errors.add(:base, "#{STATE}は下書きから公開終了に変更できません。")
     end
@@ -135,7 +150,7 @@ class Docin::Row < ApplicationModel
   end
 
   def state_option
-    return [] unless %w(下書き 公開 公開終了).include?(data[STATE])
+    return [] unless %w(下書き 公開日時待ち 公開 公開終了).include?(data[STATE])
     GpArticle::Doc.state_options.assoc(data[STATE]).presence || []
   end
 
