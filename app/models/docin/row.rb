@@ -138,16 +138,16 @@ class Docin::Row < ApplicationModel
     doc.validate
 
     if doc.name.blank?
-      doc.errors.add(:base, "#{NAME}を入力してください。")
+      doc.errors.add(:base, "#{NAME}を入力してください")
     end
     if doc.state_draft? && doc.state_was == 'public'
-      doc.errors.add(:base, "#{STATE}は公開から下書きに変更できません。")
+      doc.errors.add(:base, "#{STATE}は公開から下書きに変更できません")
     end
     if doc.state_prepared? && doc.state_was == 'public'
-      doc.errors.add(:base, "#{STATE}は公開から公開日時待ちに変更できません。")
+      doc.errors.add(:base, "#{STATE}は公開から公開日時待ちに変更できません")
     end
     if doc.state_closed? && doc.state_was == 'draft'
-      doc.errors.add(:base, "#{STATE}は下書きから公開終了に変更できません。")
+      doc.errors.add(:base, "#{STATE}は下書きから公開終了に変更できません")
     end
   end
 
