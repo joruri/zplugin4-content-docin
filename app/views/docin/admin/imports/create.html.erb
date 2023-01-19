@@ -19,6 +19,10 @@
         <th style="width: 9rem;"><%= Docin::Row::TASK_PUBLISH_PROCESS_AT %></th>
         <th style="width: 9rem;"><%= Docin::Row::TASK_CLOSE_PROCESS_AT %></th>
         <th style="width: 5rem;"><%= Docin::Row::INQUIRY_STATE %></th>
+        <th style="width: 10rem;"><%= Docin::Row::EVENT_STATE %></th>
+        <th style="width: 10rem;"><%= Docin::Row::EVENT_PERIOD %></th>
+        <th style="width: 6rem;"><%= Docin::Row::EVENT_NOTE %></th>
+        <th class="cms-list__category"><%= Docin::Row::EVENT_CATEGORY %></th>
         <th style="width: 6rem;"><%= Docin::Row::MARKER_SORT_NO %></th>
         <th style="width: 6rem;"><%= Docin::Row::MAP_COORDINATE %></th>
         <th class="cms-list__file"><%= Docin::Row::FILE_PATH %></th>
@@ -43,6 +47,10 @@
           <td style="width: 9rem;"><%=l row.task_publish_process_at %></td>
           <td style="width: 9rem;"><%=l row.task_close_process_at %></td>
           <td style="width: 5rem;"><%= row.inquiry_state_text %></td>
+          <td style="width: 10rem;"><%= row.event_state_text %></td>
+          <td style="width: 10rem;"><%=hbr row.event_periods_text %></td>
+          <td style="width: 6rem;"><%=hbr row.event_note %></td>
+          <td class="cms-list__category"><%= row.event_category_titles_text %></td>
           <td style="width: 6rem;"><%= row.marker_sort_no %></td>
           <td style="width: 6rem;"><%= row.map_coordinate %></td>
           <td class="cms-list__file"><%= file&.name %></td>

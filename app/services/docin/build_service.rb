@@ -7,6 +7,7 @@ class Docin::BuildService < ApplicationService
     @category_types = @dest_content.category_types.map do |category_type|
                         [category_type.title, category_type.categories]
                       end.to_h
+    @event_categories = @dest_content.event_category_types.flat_map(&:categories)
 
     @body_template = Erubis::Eruby.new(@content.body_template)
     @summary_template = Erubis::Eruby.new(@content.summary_template)
@@ -45,6 +46,9 @@ class Docin::BuildService < ApplicationService
 
     # inquiry
     build_inquiries(doc, row)
+
+    # event
+    build_event(doc, row)
 
     # map
     build_map(doc, row)
@@ -87,6 +91,41 @@ class Docin::BuildService < ApplicationService
 
     doc.inquiries.each do |inquiry|
       inquiry.state = row.inquiry_state unless row.inquiry_state.nil?
+    end
+  end
+
+  def build_event(doc, row)
+    doc.event_state = row.event_state
+    doc.event_note = row.event_note
+
+    attrs = doc.periods.blank? ? {} : periods_attributes_from_doc(doc)
+    new_attrs = row.event_periods.blank? ? {} : periods_attributes_from_row(row)
+    doc.periods_attributes = attrs.merge(new_attrs) { |k, ov, nv| ov.merge(nv) }
+
+    categories = @event_categories.select { |category| category.title.in?(row.event_category_titles) }
+
+    doc.event_categorizations.each do |c|
+      if c.categorized_as == 'GpCalendar::Event' && !categories.include?(c.category)
+        c.mark_for_destruction
+      end
+    end
+
+    categories.each do |category|
+      if !doc.event_categorizations.detect { |c| c.category == category && c.categorized_as == 'GpCalendar::Event' }
+        doc.event_categorizations.build(category: category, categorized_as: 'GpCalendar::Event')
+      end
+    end
+  end
+
+  def periods_attributes_from_doc(doc)
+    doc.periods.each_with_object({}).with_index do |(period, attrs), idx|
+      attrs[idx] = { id: period.id, started_on: nil, ended_on: nil }
+    end
+  end
+
+  def periods_attributes_from_row(row)
+    row.event_periods.each_with_object({}).with_index do |(period, attrs), idx|
+      attrs[idx] = { started_on: period[0], ended_on: period[1] }
     end
   end
 

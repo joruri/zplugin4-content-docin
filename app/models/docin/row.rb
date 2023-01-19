@@ -13,6 +13,10 @@ class Docin::Row < ApplicationModel
   TASK_PUBLISH_PROCESS_AT = '公開開始日時'
   TASK_CLOSE_PROCESS_AT = '公開終了日時'
   INQUIRY_STATE = '連絡先表示'
+  EVENT_STATE = 'イベントカレンダー表示'
+  EVENT_PERIOD = 'イベント期間'
+  EVENT_NOTE = 'イベント備考'
+  EVENT_CATEGORY = 'イベントカテゴリ'
   MARKER_SORT_NO = 'マップ一覧順'
   MAP_COORDINATE = '座標'
   FILE_PATH = '添付ファイル'
@@ -88,6 +92,41 @@ class Docin::Row < ApplicationModel
 
   def inquiry_state_text
     inquiry_state_option.first
+  end
+
+  def event_state
+    event_state_option.last
+  end
+
+  def event_state_text
+    event_state_option.first
+  end
+
+  def event_periods
+    return [] if data[EVENT_PERIOD].blank?
+    data[EVENT_PERIOD].split(/\r\n|\r|\n/).map(&:strip).select(&:present?).map do |period|
+      texts = period.split('～', 2).map(&:strip).select(&:present?)
+      dates = texts.map { |text| Date.parse(text) rescue nil }.reject(&:blank?)
+      dates << dates.first.dup if dates.size == 1
+      dates
+    end.reject(&:blank?)
+  end
+
+  def event_periods_text
+    event_periods.map { |period| period.join('～') }.join("\n")
+  end
+
+  def event_note
+    data[EVENT_NOTE]
+  end
+
+  def event_category_titles
+    return [] if data[EVENT_CATEGORY].blank?
+    data[EVENT_CATEGORY].split(/,|、/).reject(&:blank?)
+  end
+
+  def event_category_titles_text
+    event_category_titles.join(', ')
   end
 
   def map_exist?
@@ -176,5 +215,10 @@ class Docin::Row < ApplicationModel
   def inquiry_state_option
     return [] if data[INQUIRY_STATE].blank?
     Cms::Inquiry.state_options.assoc(data[INQUIRY_STATE]).presence || []
+  end
+
+  def event_state_option
+    return [] if data[EVENT_STATE].blank?
+    GpArticle::Doc.event_state_options.assoc(data[EVENT_STATE]).presence || []
   end
 end
