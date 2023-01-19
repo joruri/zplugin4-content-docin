@@ -51,6 +51,10 @@ class Docin::Row < ApplicationModel
     data[TITLE]
   end
 
+  def category_title(category_type_title)
+    data[category_type_title]&.strip
+  end
+
   def feature_1
     feature_1_option.last
   end
@@ -110,7 +114,7 @@ class Docin::Row < ApplicationModel
   def event_periods
     return [] if data[EVENT_PERIOD].blank?
     data[EVENT_PERIOD].split(/\r\n|\r|\n/).map(&:strip).select(&:present?).map do |period|
-      texts = period.split('～', 2).map(&:strip).select(&:present?)
+      texts = period.split('～', 2).select(&:present?)
       dates = texts.map { |text| Date.parse(text) rescue nil }.reject(&:blank?)
       dates << dates.first.dup if dates.size == 1
       dates
@@ -127,7 +131,7 @@ class Docin::Row < ApplicationModel
 
   def event_category_titles
     return [] if data[EVENT_CATEGORY].blank?
-    data[EVENT_CATEGORY].split(/,|、/).reject(&:blank?)
+    data[EVENT_CATEGORY].split(/,|、/).map(&:strip).reject(&:blank?)
   end
 
   def event_category_titles_text
@@ -152,7 +156,7 @@ class Docin::Row < ApplicationModel
 
   def marker_category_titles
     return [] if data[MARKER_CATEGORY].blank?
-    data[MARKER_CATEGORY].split(/,|、/).reject(&:blank?)
+    data[MARKER_CATEGORY].split(/,|、/).map(&:strip).reject(&:blank?)
   end
 
   def marker_category_titles_text
@@ -197,10 +201,6 @@ class Docin::Row < ApplicationModel
     map_markers.map do |marker|
       "#{marker[0]}(#{marker[1]},#{marker[2]})"
     end.join("\n")
-  end
-
-  def category_title(category_type_title)
-    data[category_type_title]
   end
 
   def file_path
