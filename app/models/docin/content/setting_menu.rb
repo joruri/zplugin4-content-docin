@@ -3,5 +3,6 @@ class Docin::Content::SettingMenu < Cms::Content::SettingMenu
 
   add_item :relation do
     add_item :gp_article_relation
+    add_item :gp_template_relation
   end
 end

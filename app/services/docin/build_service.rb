@@ -34,6 +34,9 @@ class Docin::BuildService < ApplicationService
     doc.feature_1 = row.feature_1 unless row.feature_1.nil?
     doc.feed_state = row.feed_state unless row.feed_state.nil?
 
+    # template
+    set_template(doc, row)
+
     # creator editor
     if doc.creator.blank?
       doc.build_creator
@@ -81,6 +84,17 @@ class Docin::BuildService < ApplicationService
         process_at: row.task_close_process_at
       }
    }
+  end
+
+  def set_template(doc, row)
+    return if @content.setting.template.blank?
+
+    template_values = @content.setting.template_values.dup
+    template_values.each do |k, v|
+      template_values[k] = Erubis::Eruby.new(v).evaluate(data: row.data)
+    end
+    doc.template_id = @content.setting.template.id
+    doc.template_values = template_values
   end
 
   def build_inquiries(doc, row)

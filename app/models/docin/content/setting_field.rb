@@ -4,4 +4,7 @@ class Docin::Content::SettingField < Cms::Content::SettingField
     add_item :body_template, :text_area
     add_item :summary_template, :text_area
   end
+
+  menu :gp_template_relation do
+  end
 end
