@@ -23,8 +23,13 @@
         <th style="width: 10rem;"><%= Docin::Row::EVENT_PERIOD %></th>
         <th style="width: 6rem;"><%= Docin::Row::EVENT_NOTE %></th>
         <th class="cms-list__category"><%= Docin::Row::EVENT_CATEGORY %></th>
+        <th style="width: 5rem;"><%= Docin::Row::MARKER_STATE %></th>
         <th style="width: 6rem;"><%= Docin::Row::MARKER_SORT_NO %></th>
+        <th class="cms-list__category"><%= Docin::Row::MARKER_CATEGORY %></th>
+        <th style="width: 6rem;"><%= Docin::Row::MAP_TITLE %></th>
         <th style="width: 6rem;"><%= Docin::Row::MAP_COORDINATE %></th>
+        <th style="width: 3rem;"><%= Docin::Row::MAP_ZOOM %></th>
+        <th style="width: 12rem;"><%= Docin::Row::MAP_MARKER %></th>
         <th class="cms-list__file"><%= Docin::Row::FILE_PATH %></th>
         <th class="cms-list__file-name"><%= Docin::Row::FILE_TITLE %></th>
         <th class="cms-list__alt-text"><%= Docin::Row::FILE_ALT_TEXT %></th>
@@ -51,8 +56,13 @@
           <td style="width: 10rem;"><%=hbr row.event_periods_text %></td>
           <td style="width: 6rem;"><%=hbr row.event_note %></td>
           <td class="cms-list__category"><%= row.event_category_titles_text %></td>
+          <td style="width: 5rem;"><%= row.marker_state_text %></td>
           <td style="width: 6rem;"><%= row.marker_sort_no %></td>
+          <td class="cms-list__category"><%= row.marker_category_titles_text %></td>
+          <td style="width: 6rem;"><%= row.map_title %></td>
           <td style="width: 6rem;"><%= row.map_coordinate %></td>
+          <td style="width: 3rem;"><%= row.map_zoom %></td>
+          <td style="width: 12rem;"><%=hbr row.map_markers_text %></td>
           <td class="cms-list__file"><%= file&.name %></td>
           <td class="cms-list__file-name"><%= file&.title %></td>
           <td class="cms-list__alt-text"><%= file&.alt_text %></td>

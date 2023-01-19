@@ -17,8 +17,13 @@ class Docin::Row < ApplicationModel
   EVENT_PERIOD = 'イベント期間'
   EVENT_NOTE = 'イベント備考'
   EVENT_CATEGORY = 'イベントカテゴリ'
+  MARKER_STATE = 'マップ表示'
   MARKER_SORT_NO = 'マップ一覧順'
+  MARKER_CATEGORY = 'マップカテゴリ'
+  MAP_TITLE = 'マップ名'
   MAP_COORDINATE = '座標'
+  MAP_ZOOM = '縮尺'
+  MAP_MARKER = 'マーカー'
   FILE_PATH = '添付ファイル'
   FILE_NAME = '添付ファイル名'
   FILE_TITLE = '表示ファイル名'
@@ -133,8 +138,29 @@ class Docin::Row < ApplicationModel
     map_lat.present? && map_lng.present?
   end
 
+  def marker_state
+    marker_state_option.last
+  end
+
+  def marker_state_text
+    marker_state_option.first
+  end
+
   def marker_sort_no
     data[MARKER_SORT_NO]
+  end
+
+  def marker_category_titles
+    return [] if data[MARKER_CATEGORY].blank?
+    data[MARKER_CATEGORY].split(/,|、/).reject(&:blank?)
+  end
+
+  def marker_category_titles_text
+    marker_category_titles.join(', ')
+  end
+
+  def map_title
+    data[MAP_TITLE]
   end
 
   def map_coordinate
@@ -147,6 +173,30 @@ class Docin::Row < ApplicationModel
 
   def map_lng
     map_coordinates.last
+  end
+
+  def map_zoom
+    data[MAP_ZOOM]
+  end
+
+  def map_markers
+    return [] if data[MAP_MARKER].blank?
+    data[MAP_MARKER].split(/\r\n|\r|\n/).map(&:strip).select(&:present?).map do |marker|
+      name, coordinate = marker.split(/\(|（/)
+      name.strip!
+      lat = lng = nil
+      unless coordinate.blank?
+        coordinate.gsub!(/\)|）/, '')
+        lat, lng = coordinate.split(/,|、/).map { |l| l.strip!; l.blank? ? nil : l }
+      end
+      [name, lat, lng]
+    end
+  end
+
+  def map_markers_text
+    map_markers.map do |marker|
+      "#{marker[0]}(#{marker[1]},#{marker[2]})"
+    end.join("\n")
   end
 
   def category_title(category_type_title)
@@ -220,5 +270,10 @@ class Docin::Row < ApplicationModel
   def event_state_option
     return [] if data[EVENT_STATE].blank?
     GpArticle::Doc.event_state_options.assoc(data[EVENT_STATE]).presence || []
+  end
+
+  def marker_state_option
+    return [] if data[MARKER_STATE].blank?
+    GpArticle::Doc.marker_state_options.assoc(data[MARKER_STATE]).presence || []
   end
 end

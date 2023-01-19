@@ -8,6 +8,7 @@ class Docin::BuildService < ApplicationService
                         [category_type.title, category_type.categories]
                       end.to_h
     @event_categories = @dest_content.event_category_types.flat_map(&:categories)
+    @marker_categories = @dest_content.marker_category_types.flat_map(&:categories)
 
     @body_template = Erubis::Eruby.new(@content.body_template)
     @summary_template = Erubis::Eruby.new(@content.summary_template)
@@ -152,19 +153,43 @@ class Docin::BuildService < ApplicationService
   end
 
   def build_map(doc, row)
+    doc.marker_state = row.marker_state
+
+    categories = @marker_categories.select { |category| category.title.in?(row.marker_category_titles) }
+
+    doc.marker_categorizations.each do |c|
+      if c.categorized_as == 'Map::Marker' && !categories.include?(c.category)
+        c.mark_for_destruction
+      end
+    end
+
+    categories.each do |category|
+      if !doc.marker_categorizations.detect { |c| c.category == category && c.categorized_as == 'Map::Marker' }
+        doc.marker_categorizations.build(category: category, categorized_as: 'Map::Marker')
+      end
+    end
+
     if row.map_exist?
       doc.maps.build if doc.maps.blank?
 
       map = doc.maps[0]
       map.name = '1'
+      map.title = row.map_title
       map.map_lat = row.map_lat
       map.map_lng = row.map_lng
-      map.map_zoom = 14
+      map.map_zoom = row.map_zoom
 
-      marker = map.markers[0] || map.markers.build
-      marker.name = row.title
-      marker.lat = row.map_lat
-      marker.lng = row.map_lng
+      new_map_markers = row.map_markers
+      new_map_markers.each_with_index do |(name, lat, lng), idx|
+        marker = map.markers[idx] || map.markers.build
+        marker.name = name
+        marker.lat = lat
+        marker.lng = lng
+      end
+
+      (new_map_markers.size).upto(map.markers.size - 1) do |idx|
+        map.markers[idx].mark_for_destruction
+      end
     else
       doc.maps.each do |map|
         map.mark_for_destruction

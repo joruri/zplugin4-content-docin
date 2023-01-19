@@ -43,4 +43,54 @@ RSpec.describe Docin::Row, type: :model do
       end
     end
   end
+
+  describe '#map_markers' do
+    context 'single' do
+      it 'gets markers' do
+        data = { 'マーカー' => 'マーカー１(35.3, 139.4)' }
+        row = described_class.new(data: data)
+        expect(row.map_markers).to match([['マーカー１', '35.3', '139.4']])
+      end
+    end
+
+    context 'multiple' do
+      it 'gets markers' do
+        data = { 'マーカー' => "マーカー１(35.3, 139.4)\nマーカー２(33, 133)" }
+        row = described_class.new(data: data)
+        expect(row.map_markers).to match([['マーカー１', '35.3', '139.4'], ['マーカー２', '33', '133']])
+      end
+    end
+
+    context 'only name' do
+      it 'gets markers' do
+        data = { 'マーカー' => 'マーカー１' }
+        row = described_class.new(data: data)
+        expect(row.map_markers).to match([['マーカー１', nil, nil]])
+      end
+    end
+
+    context 'only latitude' do
+      it 'gets markers' do
+        data = { 'マーカー' => 'マーカー１(35.3)' }
+        row = described_class.new(data: data)
+        expect(row.map_markers).to match([['マーカー１', '35.3', nil]])
+      end
+    end
+
+    context 'only longitude' do
+      it 'gets markers' do
+        data = { 'マーカー' => 'マーカー１(,139.4)' }
+        row = described_class.new(data: data)
+        expect(row.map_markers).to match([['マーカー１', nil, '139.4']])
+      end
+    end
+
+    context 'only coordinate' do
+      it 'gets markers' do
+        data = { 'マーカー' => '(35.3, 139.4)' }
+        row = described_class.new(data: data)
+        expect(row.map_markers).to match([['', '35.3', '139.4']])
+      end
+    end
+  end
 end
