@@ -28,9 +28,6 @@ class Docin::BuildService < ApplicationService
     doc.tasks_attributes = tasks_attributes(doc, row)
     doc.recognized_at = Time.now
     doc.qrcode_state = 'visible'
-    doc.marker_state = 'visible'
-    doc.marker_sort_no = row.marker_sort_no
-    doc.navigation_state = 'enabled'
     doc.feature_1 = row.feature_1 unless row.feature_1.nil?
     doc.feed_state = row.feed_state unless row.feed_state.nil?
 
@@ -172,6 +169,8 @@ class Docin::BuildService < ApplicationService
 
   def build_map(doc, row)
     doc.marker_state = row.marker_state
+    doc.marker_sort_no = row.marker_sort_no
+    doc.navigation_state = 'enabled'
 
     categories = @marker_categories.select { |category| category.title.in?(row.marker_category_titles) }
 
