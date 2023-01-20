@@ -26,7 +26,8 @@ class Docin::ParseService < ApplicationService
     @content.gp_article_content.docs
             .where(name: rows.map(&:name))
             .order(:id)
-            .preload(:content, :creator, :marker_categories, :maps => :markers)
+            .preload(:content, :creator, :editor, :files, :inquiries,
+                     :event_categories, :marker_categories, :maps => :markers)
             .index_by(&:name)
   end
 
