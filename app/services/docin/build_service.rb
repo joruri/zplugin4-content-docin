@@ -76,14 +76,16 @@ class Docin::BuildService < ApplicationService
   end
 
   def set_template(doc, row)
-    return if @content.setting.template.blank?
-
-    template_values = @content.setting.template_values.dup
-    template_values.each do |k, v|
-      template_values[k] = Erubis::Eruby.new(v).evaluate(data: row.data)
+    if @content.setting.template.blank?
+      doc.template_id = nil
+    else
+      template_values = @content.setting.template_values.dup
+      template_values.each do |k, v|
+        template_values[k] = Erubis::Eruby.new(v).evaluate(data: row.data)
+      end
+      doc.template_id = @content.setting.template.id
+      doc.template_values = template_values
     end
-    doc.template_id = @content.setting.template.id
-    doc.template_values = template_values
   end
 
   def build_creator_or_editor(doc)
