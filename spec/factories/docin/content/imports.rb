@@ -8,9 +8,9 @@ FactoryBot.define do
 
     trait :with_related_contents do
       after(:create) do |item|
-        gp_article_content = FactoryBot.create(:gp_article_content, :with_related_contents)
-        gp_template_content = FactoryBot.create(:gp_template_content)
-        template = FactoryBot.create(:gp_template_template, :with_items, content: gp_template_content)
+        gp_article_content = create(:gp_article_content, :with_related_contents)
+        gp_template_content = create(:gp_template_content)
+        template = create(:gp_template_template, :with_items, content: gp_template_content)
         gp_article_content.setting.gp_template_content_template_id = gp_template_content.id
         gp_article_content.setting.template_ids = [template.id]
         gp_article_content.setting.default_template_id = template.id

@@ -1,5 +1,5 @@
 RSpec.describe Docin::Admin::Content::SettingsController, type: :request do
-  let!(:content) { FactoryBot.create(:docin_import_content, :with_related_contents) }
+  let!(:content) { create(:docin_import_content, :with_related_contents) }
 
   before do
     login root_user
