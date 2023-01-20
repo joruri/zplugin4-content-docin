@@ -38,15 +38,7 @@ class Docin::BuildService < ApplicationService
     set_template(doc, row)
 
     # creator editor
-    if doc.creator.blank?
-      doc.build_creator
-      doc.creator.user = @user
-      doc.creator.group = @user.group
-    else
-      doc.build_editor if doc.editor.blank?
-      doc.editor.user = @user
-      doc.editor.group = @user.group
-    end
+    build_creator_or_editor(doc)
 
     # inquiry
     build_inquiries(doc, row)
@@ -95,6 +87,18 @@ class Docin::BuildService < ApplicationService
     end
     doc.template_id = @content.setting.template.id
     doc.template_values = template_values
+  end
+
+  def build_creator_or_editor(doc)
+    if doc.creator.blank?
+      doc.build_creator
+      doc.creator.user = @user
+      doc.creator.group = @user.group
+    else
+      doc.build_editor if doc.editor.blank?
+      doc.editor.user = @user
+      doc.editor.group = @user.group
+    end
   end
 
   def build_inquiries(doc, row)
