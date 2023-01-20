@@ -4,4 +4,11 @@
   <%= render 'gp_template/admin/shared/form',
               template: @item.gp_article_content.default_template,
               template_values: @item.template_values %>
+<%- else -%>
+  <table class="cms-detail">
+    <tr>
+      <th>初期テンプレート</th>
+      <td>設定されていません。</td>
+    </tr>
+  </table>
 <%- end -%>

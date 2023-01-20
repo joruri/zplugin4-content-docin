@@ -1,6 +1,6 @@
 <%= form_with model: @item, scope: :item, url: { action: :create }, html: { method: :post, multipart: true } do |f| %>
   <%= render 'form', f: f %>
   <div class="cms-submitters">
-    <%= f.submit '確認する', name: :confirm %>
+    <%= f.submit :confirm %>
   </div>
 <% end %>

@@ -80,7 +80,7 @@
   <%- unless @rows.any? { |row| row.doc.errors.present? } -%>
     <%= f.hidden_field :csv, value: @csv %>
     <div class="cms-submitters">
-      <%= f.submit '登録する', name: :register, data: { confirm: '登録してよろしいですか？' } %>
+      <%= f.submit :register, data: { confirm: '登録してよろしいですか？' } %>
     </div>
   <%- end -%>
 <% end %>
