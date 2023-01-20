@@ -14,7 +14,7 @@ class Docin::ParseService < ApplicationService
 
     doc_map = load_doc_map(rows)
     rows.each do |row|
-      row.doc = @builder.build(row, doc: doc_map[row.name])
+      row.doc = @builder.build(row, doc: replace(doc_map[row.name], row))
     end
 
     rows
@@ -25,8 +25,18 @@ class Docin::ParseService < ApplicationService
   def load_doc_map(rows)
     @content.gp_article_content.docs
             .where(name: rows.map(&:name))
-            .order(id: :desc)
+            .order(:id)
             .preload(:content, :creator, :marker_categories, :maps => :markers)
             .index_by(&:name)
+  end
+
+  def replace(doc, row)
+    if doc.blank? || !(doc.state_public? && %w(draft prepared).include?(row.state))
+      doc
+    else
+      dup = doc.duplication(state: row.state)
+      dup.prev_edition = doc
+      dup
+    end
   end
 end
