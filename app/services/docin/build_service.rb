@@ -147,10 +147,10 @@ class Docin::BuildService < ApplicationService
 
   def build_categories(doc, row)
     categories = @category_types.keys.each_with_object([]) do |title, categories|
-                   category_title = row.category_title(title)
-                   next if category_title.blank?
-                   category = @category_types[title].find { |category| category.title == category_title }
-                   categories << category if category.present?
+                   category_titles = row.category_titles_from_category_type_title(title)
+                   next if category_titles.blank?
+                   cs = @category_types[title].select { |category| category.title.in?(category_titles) }
+                   categories.concat(cs) if cs.present?
                  end
     row.category_titles = categories.pluck(:title)
 

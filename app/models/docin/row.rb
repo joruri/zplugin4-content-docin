@@ -51,8 +51,13 @@ class Docin::Row < ApplicationModel
     data[TITLE]
   end
 
-  def category_title(category_type_title)
-    data[category_type_title]&.strip
+  def category_titles_from_category_type_title(category_type_title)
+    return [] if data[category_type_title].blank?
+    data[category_type_title].split(/,|、/).map(&:strip).reject(&:blank?)
+  end
+
+  def category_titles_text
+    category_titles.join(', ')
   end
 
   def feature_1
