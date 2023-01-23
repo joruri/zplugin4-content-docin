@@ -5,77 +5,79 @@
 <%- end -%>
 
 <%= form_with model: @item, scope: :item, url: { action: :create }, html: { method: :post, multipart: true } do |f| %>
-  <table class="cms-list" style="width: 3000px; table-layout: fixed;" data-controller="basic-list">
-    <thead>
-      <tr>
-        <th class="cms-list__url"><%= Docin::Row::NAME %></th>
-        <th class="cms-list__status"><%= Docin::Row::STATE %></th>
-        <th class="cms-list__title"><%= Docin::Row::TITLE %></th>
-        <th style="width: 6rem;"><%= Docin::Row::FEATURE_1 %></th>
-        <th style="width: 8rem;"><%= Docin::Row::FEED_STATE %></th>
-        <th class="cms-list__category">カテゴリ</th>
-        <th style="width: 9rem;"><%= Docin::Row::DISPLAY_PUBLISHED_AT %></th>
-        <th style="width: 9rem;"><%= Docin::Row::DISPLAY_UPDATED_AT %></th>
-        <th style="width: 9rem;"><%= Docin::Row::TASK_PUBLISH_PROCESS_AT %></th>
-        <th style="width: 9rem;"><%= Docin::Row::TASK_CLOSE_PROCESS_AT %></th>
-        <th style="width: 5rem;"><%= Docin::Row::INQUIRY_STATE %></th>
-        <th style="width: 10rem;"><%= Docin::Row::EVENT_STATE %></th>
-        <th style="width: 10rem;"><%= Docin::Row::EVENT_PERIOD %></th>
-        <th style="width: 6rem;"><%= Docin::Row::EVENT_NOTE %></th>
-        <th class="cms-list__category"><%= Docin::Row::EVENT_CATEGORY %></th>
-        <th style="width: 5rem;"><%= Docin::Row::MARKER_STATE %></th>
-        <th style="width: 6rem;"><%= Docin::Row::MARKER_SORT_NO %></th>
-        <th class="cms-list__category"><%= Docin::Row::MARKER_CATEGORY %></th>
-        <th style="width: 6rem;"><%= Docin::Row::MAP_TITLE %></th>
-        <th style="width: 6rem;"><%= Docin::Row::MAP_COORDINATE %></th>
-        <th style="width: 3rem;"><%= Docin::Row::MAP_ZOOM %></th>
-        <th style="width: 12rem;"><%= Docin::Row::MAP_MARKER %></th>
-        <th class="cms-list__file"><%= Docin::Row::FILE_PATH %></th>
-        <th class="cms-list__file-name"><%= Docin::Row::FILE_TITLE %></th>
-        <th class="cms-list__alt-text"><%= Docin::Row::FILE_ALT_TEXT %></th>
-        <th style="width: 6rem;"><%= Docin::Row::FILE_IMAGE_RESIZE %></th>
-        <th class="cms-list__title">エラー</th>
-      </tr>
-    </thead>
-    <tbody>
-      <%- @rows.each do |row| -%>
-        <%- file = row.doc.files.reject { |file| file.marked_for_destruction? }.first -%>
+  <div class="cms-list-scroll">
+    <table class="cms-list" data-controller="basic-list">
+      <thead>
         <tr>
-          <td class="cms-list__url"><%= row.name %></td>
-          <td class="cms-list__status"><%= row.state_text %></td>
-          <td class="cms-list__title"><%= row.title %></td>
-          <td style="width: 6rem;"><%= row.feature_1_text %></td>
-          <td style="width: 8rem;"><%= row.feed_state_text %></td>
-          <td class="cms-list__category"><%= row.category_titles_text %></td>
-          <td style="width: 9rem;"><%=l row.display_published_at %></td>
-          <td style="width: 9rem;"><%=l row.display_updated_at %></td>
-          <td style="width: 9rem;"><%=l row.task_publish_process_at %></td>
-          <td style="width: 9rem;"><%=l row.task_close_process_at %></td>
-          <td style="width: 5rem;"><%= row.inquiry_state_text %></td>
-          <td style="width: 10rem;"><%= row.event_state_text %></td>
-          <td style="width: 10rem;"><%=hbr row.event_periods_text %></td>
-          <td style="width: 6rem;"><%=hbr row.event_note %></td>
-          <td class="cms-list__category"><%= row.event_category_titles_text %></td>
-          <td style="width: 5rem;"><%= row.marker_state_text %></td>
-          <td style="width: 6rem;"><%= row.marker_sort_no %></td>
-          <td class="cms-list__category"><%= row.marker_category_titles_text %></td>
-          <td style="width: 6rem;"><%= row.map_title %></td>
-          <td style="width: 6rem;"><%= row.map_coordinate %></td>
-          <td style="width: 3rem;"><%= row.map_zoom %></td>
-          <td style="width: 12rem;"><%=hbr row.map_markers_text %></td>
-          <td class="cms-list__file"><%= file&.name %></td>
-          <td class="cms-list__file-name"><%= file&.title %></td>
-          <td class="cms-list__alt-text"><%= file&.alt_text %></td>
-          <td style="width: 6rem;"><%= file&.image_resize %></td>
-          <td class="cms-list__title">
-            <%- if row.doc.errors.present? -%>
-              <span class="note"><%=hbr row.doc.errors.full_messages.to_a.join("\n") -%></span>
-            <%- end -%>
-          </td>
+          <th class="cms-list__url"><%= Docin::Row::NAME %></th>
+          <th class="cms-list__status"><%= Docin::Row::STATE %></th>
+          <th class="cms-list__title"><%= Docin::Row::TITLE %></th>
+          <th class="cms-list__list-status"><%= Docin::Row::FEATURE_1 %></th>
+          <th class="cms-list__feed-status"><%= Docin::Row::FEED_STATE %></th>
+          <th class="cms-list__title">カテゴリ</th>
+          <th class="cms-list__display-publish-date"><%= Docin::Row::DISPLAY_PUBLISHED_AT %></th>
+          <th class="cms-list__display-update-date"><%= Docin::Row::DISPLAY_UPDATED_AT %></th>
+          <th class="cms-list__publish-process-date"><%= Docin::Row::TASK_PUBLISH_PROCESS_AT %></th>
+          <th class="cms-list__close-process-date"><%= Docin::Row::TASK_CLOSE_PROCESS_AT %></th>
+          <th class="cms-list__inquiry-status"><%= Docin::Row::INQUIRY_STATE %></th>
+          <th class="cms-list__event-status"><%= Docin::Row::EVENT_STATE %></th>
+          <th class="cms-list__event-period"><%= Docin::Row::EVENT_PERIOD %></th>
+          <th class="cms-list__event-note"><%= Docin::Row::EVENT_NOTE %></th>
+          <th class="cms-list__title"><%= Docin::Row::EVENT_CATEGORY %></th>
+          <th class="cms-list__marker-status"><%= Docin::Row::MARKER_STATE %></th>
+          <th class="cms-list__marker-sort"><%= Docin::Row::MARKER_SORT_NO %></th>
+          <th class="cms-list__title"><%= Docin::Row::MARKER_CATEGORY %></th>
+          <th class="cms-list__map-title"><%= Docin::Row::MAP_TITLE %></th>
+          <th class="cms-list__map-coordinate"><%= Docin::Row::MAP_COORDINATE %></th>
+          <th class="cms-list__map-zoom"><%= Docin::Row::MAP_ZOOM %></th>
+          <th class="cms-list__map-marker"><%= Docin::Row::MAP_MARKER %></th>
+          <th class="cms-list__file"><%= Docin::Row::FILE_PATH %></th>
+          <th class="cms-list__file-name"><%= Docin::Row::FILE_TITLE %></th>
+          <th class="cms-list__alt-text"><%= Docin::Row::FILE_ALT_TEXT %></th>
+          <th class="cms-list__file-resize"><%= Docin::Row::FILE_IMAGE_RESIZE %></th>
+          <th class="cms-list__title">エラー</th>
         </tr>
-      <%- end -%>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        <%- @rows.each do |row| -%>
+          <%- file = row.doc.files.reject { |file| file.marked_for_destruction? }.first -%>
+          <tr>
+            <td class="cms-list__url"><%= row.name %></td>
+            <td class="cms-list__status"><%= row.state_text %></td>
+            <td class="cms-list__title"><%= row.title %></td>
+            <td class="cms-list__list-status"><%= row.feature_1_text %></td>
+            <td class="cms-list__feed-status"><%= row.feed_state_text %></td>
+            <td class="cms-list__title"><%= row.category_titles_text %></td>
+            <td class="cms-list__display-publish-date"><%=l row.display_published_at %></td>
+            <td class="cms-list__display-update-date"><%=l row.display_updated_at %></td>
+            <td class="cms-list__publish-process-date"><%=l row.task_publish_process_at %></td>
+            <td class="cms-list__close-process-date"><%=l row.task_close_process_at %></td>
+            <td class="cms-list__inquiry-status"><%= row.inquiry_state_text %></td>
+            <td class="cms-list__event-status"><%= row.event_state_text %></td>
+            <td class="cms-list__event-period"><%=hbr row.event_periods_text %></td>
+            <td class="cms-list__event-note"><%=hbr row.event_note %></td>
+            <td class="cms-list__title"><%= row.event_category_titles_text %></td>
+            <td class="cms-list__marker-status"><%= row.marker_state_text %></td>
+            <td class="cms-list__marker-sort"><%= row.marker_sort_no %></td>
+            <td class="cms-list__title"><%= row.marker_category_titles_text %></td>
+            <td class="cms-list__map-title"><%= row.map_title %></td>
+            <td class="cms-list__map-coordinate"><%= row.map_coordinate %></td>
+            <td class="cms-list__map-zoom"><%= row.map_zoom %></td>
+            <td class="cms-list__map-marker"><%=hbr row.map_markers_text %></td>
+            <td class="cms-list__file"><%= file&.name %></td>
+            <td class="cms-list__file-name"><%= file&.title %></td>
+            <td class="cms-list__alt-text"><%= file&.alt_text %></td>
+            <td class="cms-list__file-resize"><%= file&.image_resize %></td>
+            <td class="cms-list__title">
+              <%- if row.doc.errors.present? -%>
+                <span class="note"><%=hbr row.doc.errors.full_messages.to_a.join("\n") -%></span>
+              <%- end -%>
+            </td>
+          </tr>
+        <%- end -%>
+      </tbody>
+    </table>
+  </div>
 
   <%- unless @rows.any? { |row| row.doc.errors.present? } -%>
     <%= f.hidden_field :csv, value: @csv %>
