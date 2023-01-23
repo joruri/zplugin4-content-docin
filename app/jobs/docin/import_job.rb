@@ -30,8 +30,8 @@ class Docin::ImportJob < Sys::ProcessJob
     row.doc.files.each do |file|
       file.destroy if file.marked_for_destruction?
     end
-    if row.doc.save
-      Cms::PublicateInteractor.call(item: row.doc)
+    if row.doc.save && (row.doc.state_public? || row.doc.state_closed?)
+      Docin::PublisherJob.perform_later(row.doc)
     end
   end
 end
