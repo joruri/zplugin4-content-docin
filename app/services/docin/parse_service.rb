@@ -8,7 +8,7 @@ class Docin::ParseService < ApplicationService
 
   def parse(csv)
     require 'csv'
-    rows = CSV.parse(csv, headers: true, skip_blanks: true)
+    rows = CSV.parse(csv, headers: true, skip_blanks: true, converters: lambda { |c| c&.strip } )
               .reject { |data| data.to_h.values.all?(&:nil?) }
               .map { |data| Docin::Row.new(data: data) }
 
