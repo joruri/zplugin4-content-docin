@@ -4,7 +4,11 @@ class Docin::ImportJob < Sys::ProcessJob
   process_name 'docin/docs/import'
 
   def perform(content, options = {})
-    rows = Docin::ParseService.new(content, script.process.user).parse(options[:csv])
+    rows = Docin::Parse::CsvInteractor.call(
+      content: content,
+      user: script.process.user,
+      csv: options[:csv]
+    ).results
 
     script.total! rows.size
 

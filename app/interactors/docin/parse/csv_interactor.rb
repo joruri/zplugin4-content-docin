@@ -1,23 +1,19 @@
-class Docin::ParseService < ApplicationService
-  def initialize(content, user)
-    @content = content
-    @user = user
+class Docin::Parse::CsvInteractor < ApplicationInteractor
+  context_in :content, :user, :csv, required: true
+  context_out :results
 
-    @builder = Docin::BuildService.new(@content, @user)
-  end
+  def call
+    builder = Docin::BuildService.new(@content, @user)
 
-  def parse(csv)
     require 'csv'
-    rows = CSV.parse(csv, headers: true, skip_blanks: true, converters: lambda { |c| c&.strip } )
-              .reject { |data| data.to_h.values.all?(&:nil?) }
-              .map { |data| Docin::Row.new(data: data) }
+    @results = CSV.parse(@csv, headers: true, skip_blanks: true, converters: lambda { |c| c&.strip } )
+                  .reject { |data| data.to_h.values.all?(&:nil?) }
+                  .map { |data| Docin::Row.new(data: data) }
 
-    doc_map = load_doc_map(rows)
-    rows.each do |row|
-      row.doc = @builder.build(row, doc: replace(doc_map[row.name], row))
+    doc_map = load_doc_map(@results)
+    @results.each do |row|
+      row.doc = builder.build(row, doc: replace(doc_map[row.name], row))
     end
-
-    rows
   end
 
   private

@@ -19,7 +19,7 @@ class Docin::Admin::ImportsController < Docin::Admin::BaseController
 
   def confirm
     @csv = NKF.nkf('-w', params[:item][:file].read)
-    @rows = Docin::ParseService.new(@content, core.user).parse(@csv)
+    @rows = Docin::Parse::CsvInteractor.call(content: @content, user: core.user, csv: @csv).results
     @rows.each(&:validate)
   rescue CSV::MalformedCSVError => e
     return redirect_to url_for(action: :index), alert: "CSVファイルの形式が不正です。#{e}"
