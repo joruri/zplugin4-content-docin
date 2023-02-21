@@ -4,7 +4,7 @@ class Docin::Row < ApplicationModel
   attr_accessor :category_titles
 
   NAME = 'ディレクトリ名'
-  STATE = '状態'
+  STATE = 'ステータス'
   TITLE = 'タイトル'
   FEATURE_1 = '記事一覧表示'
   FEED_STATE = '記事フィード表示'
@@ -17,8 +17,8 @@ class Docin::Row < ApplicationModel
   EVENT_PERIOD = 'イベント期間'
   EVENT_NOTE = 'イベント備考'
   EVENT_CATEGORY = 'イベントカテゴリ'
-  MARKER_STATE = 'マップ表示'
-  MARKER_SORT_NO = 'マップ一覧順'
+  MARKER_STATE = '地図表示'
+  MARKER_SORT_NO = '地図表示順'
   MARKER_CATEGORY = 'マップカテゴリ'
   MAP_TITLE = 'マップ名'
   MAP_COORDINATE = '座標'
