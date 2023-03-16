@@ -1,7 +1,6 @@
 const webpack = require("webpack");
 const path = require("path");
 const glob = require("glob");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
   entry: glob.sync('./app/javascript/packs/*.js').reduce((result, file, index) => {
@@ -21,12 +20,6 @@ module.exports = {
     ]
   },
 
-  plugins: [
-    new MiniCssExtractPlugin({
-      filename: "stylesheets/docin/[name].css"
-    })
-  ],
-
   module: {
     rules: [
       {
@@ -39,7 +32,7 @@ module.exports = {
       }, {
         test: /\.(css|sass|scss)$/,
         use: [
-          { loader: MiniCssExtractPlugin.loader },
+          { loader: "style-loader" },
           { loader: "css-loader" },
           { loader: "postcss-loader" },
           { loader: "sass-loader" },
