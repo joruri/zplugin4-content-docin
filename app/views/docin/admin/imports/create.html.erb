@@ -1,7 +1,7 @@
 <%- if @rows.any? { |row| row.doc.errors.present? } -%>
   <div class="util-alert">エラーが検出されました。エラーの内容を確認してCSVファイルを修正し再度インポートしてください。</div>
 <%- else -%>
-  <div class="util-notice">インポートする内容を確認し、画面下部にある「登録する」ボタンを押してください。</div>
+  <div class="util-notice">インポートする内容を確認し、画面下部にある「登録」ボタンを押してください。</div>
 <%- end -%>
 
 <%= form_with model: @item, scope: :item, url: { action: :create }, html: { method: :post, multipart: true } do |f| %>
