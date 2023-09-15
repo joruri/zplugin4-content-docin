@@ -1,7 +1,7 @@
 class Zplugin::Content::Docin::Admin::FrontController < Cms::Admin::BaseController
   def pre_dispatch
     @plugin = Sys::Plugin.find(params[:plugin_id])
-    @policy = authorize(policy: Zplugin::Content::Docin::FrontPolicy)
+    @policy = authorize(Zplugin::Content::Docin::FrontPolicy)
   end
 
   def index
@@ -9,5 +9,4 @@ class Zplugin::Content::Docin::Admin::FrontController < Cms::Admin::BaseControll
                                     .paginate(page: params[:page], per_page: params[:limit])
     _index @items
   end
-
 end

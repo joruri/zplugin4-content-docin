@@ -6,14 +6,20 @@ module Zplugin
         isolate_namespace Zplugin::Content::Docin
 
         config.after_initialize do |app|
-          app.config.assets.precompile += %w(sample/admin.js sample/public.js)
+          app.config.assets.precompile += %w(docin/admin.js docin/admin.css)
+        end
+
+        config.to_prepare do
+          Dir.glob(Zplugin::Content::Docin::Engine.root.join("app/overrides/**/*_override.rb")).each do |c|
+            require_dependency(c)
+          end
         end
 
         class << self
           def version
             VERSION
           end
-          
+
           def install
           end
 

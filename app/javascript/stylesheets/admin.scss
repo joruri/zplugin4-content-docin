@@ -1,0 +1,67 @@
+.cms-list {
+  &-scroll {
+    width: calc(100vw - 240px);
+    margin-bottom: 1rem;
+    overflow: auto;
+    white-space: nowrap;
+
+    table {
+      width: 100% !important;
+      height: auto !important;
+      margin: 0 0 1rem !important;
+      table-layout: auto;
+    }
+  }
+
+  &__list-status {
+    width: 6rem;
+  }
+  &__feed-status {
+    width: 8rem;
+  }
+  &__display-publish-date {
+    width: 9rem;
+  }
+  &__display-update-date {
+    width: 9rem;
+  }
+  &__publish-process-date {
+    width: 9rem;
+  }
+  &__close-process-date {
+    width: 9rem;
+  }
+  &__inquiry-status {
+    width: 5rem;
+  }
+  &__event-status {
+    width: 10rem;
+  }
+  &__event-period {
+    width: 10rem;
+  }
+  &__event-note {
+    width: 6rem;
+  }
+  &__marker-status {
+    width: 5rem;
+  }
+  &__marker-sort {
+    width: 6rem;
+  }
+  &__map-title {
+    width: 6rem;
+  }
+  &__map-coordinate {
+    width: 6rem;
+  }
+  &__map-zoom {
+    width: 3rem;
+  }
+  &__map-marker {
+    width: 12rem;
+  }
+  &__file-resize {
+    width: 6rem;
+  }
+}

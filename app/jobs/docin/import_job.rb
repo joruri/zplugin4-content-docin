@@ -1,29 +1,41 @@
-class Docin::ImportJob < ApplicationJob
-  def perform(content, user, csv)
-    @dest_content = content.gp_article_content
+class Docin::ImportJob < Sys::ProcessJob
+  queue_as :batch
+  queue_with_priority 10
+  process_name 'docin/docs/import'
 
-    rows = Docin::ParseService.new(content, user).parse(csv)
-    prev_names = @dest_content.docs.group(:name).pluck(:name)
-    next_names = rows.map(&:name)
+  def perform(content, options = {})
+    rows = Docin::Parse::CsvInteractor.call(
+      content: content,
+      user: script.process.user,
+      csv: options[:csv]
+    ).results
 
-    update_docs(rows)
-    close_docs(prev_names - next_names)
+    script.total! rows.size
+
+    rows.each do |row|
+      script.progress! row do
+        update_doc(row)
+      end
+    end
   end
 
   private
 
-  def update_docs(rows)
-    rows.each do |row|
-      row.doc.categorizations.each do |c|
-        c.destroy if c.marked_for_destruction?
-      end
-      row.doc.save
+  def update_doc(row)
+    row.doc.categorizations.each do |c|
+      c.destroy if c.marked_for_destruction?
     end
-  end
-
-  def close_docs(names)
-    @dest_content.docs.where(name: names).order(:id).each do |doc|
-      doc.close
+    row.doc.maps.each do |map|
+      map.markers.each do |marker|
+        marker.destroy if marker.marked_for_destruction?
+      end
+      map.destroy if map.marked_for_destruction?
+    end
+    row.doc.files.each do |file|
+      file.destroy if file.marked_for_destruction?
+    end
+    if row.doc.save && (row.doc.state_public? || row.doc.state_closed?)
+      Docin::PublisherJob.perform_later(row.doc)
     end
   end
 end
