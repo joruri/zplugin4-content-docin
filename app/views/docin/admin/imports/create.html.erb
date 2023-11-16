@@ -9,32 +9,32 @@
     <table class="cms-list" data-controller="basic-list">
       <thead>
         <tr>
-          <th class="cms-list__url"><%= Docin::Row::NAME %></th>
-          <th class="cms-list__status"><%= Docin::Row::STATE %></th>
-          <th class="cms-list__title"><%= Docin::Row::TITLE %></th>
-          <th class="cms-list__list-status"><%= Docin::Row::FEATURE_1 %></th>
-          <th class="cms-list__feed-status"><%= Docin::Row::FEED_STATE %></th>
+          <th class="cms-list__url"><%= Docin::Content::Setting.human_attribute_name :doc_name %></th>
+          <th class="cms-list__status"><%= Docin::Content::Setting.human_attribute_name :doc_state %></th>
+          <th class="cms-list__title"><%= Docin::Content::Setting.human_attribute_name :title %></th>
+          <th class="cms-list__list-status"><%= Docin::Content::Setting.human_attribute_name :feature_1 %></th>
+          <th class="cms-list__feed-status"><%= Docin::Content::Setting.human_attribute_name :feature_1 %></th>
           <th class="cms-list__title">カテゴリ</th>
-          <th class="cms-list__display-publish-date"><%= Docin::Row::DISPLAY_PUBLISHED_AT %></th>
-          <th class="cms-list__display-update-date"><%= Docin::Row::DISPLAY_UPDATED_AT %></th>
-          <th class="cms-list__publish-process-date"><%= Docin::Row::TASK_PUBLISH_PROCESS_AT %></th>
-          <th class="cms-list__close-process-date"><%= Docin::Row::TASK_CLOSE_PROCESS_AT %></th>
-          <th class="cms-list__inquiry-status"><%= Docin::Row::INQUIRY_STATE %></th>
-          <th class="cms-list__event-status"><%= Docin::Row::EVENT_STATE %></th>
-          <th class="cms-list__event-period"><%= Docin::Row::EVENT_PERIOD %></th>
-          <th class="cms-list__event-note"><%= Docin::Row::EVENT_NOTE %></th>
-          <th class="cms-list__title"><%= Docin::Row::EVENT_CATEGORY %></th>
-          <th class="cms-list__marker-status"><%= Docin::Row::MARKER_STATE %></th>
-          <th class="cms-list__marker-sort"><%= Docin::Row::MARKER_SORT_NO %></th>
-          <th class="cms-list__title"><%= Docin::Row::MARKER_CATEGORY %></th>
-          <th class="cms-list__map-title"><%= Docin::Row::MAP_TITLE %></th>
-          <th class="cms-list__map-coordinate"><%= Docin::Row::MAP_COORDINATE %></th>
-          <th class="cms-list__map-zoom"><%= Docin::Row::MAP_ZOOM %></th>
-          <th class="cms-list__map-marker"><%= Docin::Row::MAP_MARKER %></th>
-          <th class="cms-list__file"><%= Docin::Row::FILE_PATH %></th>
-          <th class="cms-list__file-name"><%= Docin::Row::FILE_TITLE %></th>
-          <th class="cms-list__alt-text"><%= Docin::Row::FILE_ALT_TEXT %></th>
-          <th class="cms-list__file-resize"><%= Docin::Row::FILE_IMAGE_RESIZE %></th>
+          <th class="cms-list__display-publish-date"><%= Docin::Content::Setting.human_attribute_name :display_published_at %></th>
+          <th class="cms-list__display-update-date"><%= Docin::Content::Setting.human_attribute_name :display_updated_at %></th>
+          <th class="cms-list__publish-process-date"><%= Docin::Content::Setting.human_attribute_name :task_publish_process_at %></th>
+          <th class="cms-list__close-process-date"><%= Docin::Content::Setting.human_attribute_name :task_close_process_at %></th>
+          <th class="cms-list__inquiry-status"><%= Docin::Content::Setting.human_attribute_name :inquiry_state %></th>
+          <th class="cms-list__event-status"><%= Docin::Content::Setting.human_attribute_name :event_state %></th>
+          <th class="cms-list__event-period"><%= Docin::Content::Setting.human_attribute_name :event_period %></th>
+          <th class="cms-list__event-note"><%= Docin::Content::Setting.human_attribute_name :event_note %></th>
+          <th class="cms-list__title"><%= Docin::Content::Setting.human_attribute_name :event_category %></th>
+          <th class="cms-list__marker-status"><%= Docin::Content::Setting.human_attribute_name :marker_state %></th>
+          <th class="cms-list__marker-sort"><%= Docin::Content::Setting.human_attribute_name :marker_sort_no %></th>
+          <th class="cms-list__title"><%= Docin::Content::Setting.human_attribute_name :marker_category %></th>
+          <th class="cms-list__map-title"><%= Docin::Content::Setting.human_attribute_name :map_title %></th>
+          <th class="cms-list__map-coordinate"><%= Docin::Content::Setting.human_attribute_name :map_coordinate %></th>
+          <th class="cms-list__map-zoom"><%= Docin::Content::Setting.human_attribute_name :map_zoom %></th>
+          <th class="cms-list__map-marker"><%= Docin::Content::Setting.human_attribute_name :map_marker %></th>
+          <th class="cms-list__file"><%= Docin::Content::Setting.human_attribute_name :file_path %></th>
+          <th class="cms-list__file-name"><%= Docin::Content::Setting.human_attribute_name :file_title %></th>
+          <th class="cms-list__alt-text"><%= Docin::Content::Setting.human_attribute_name :file_alt_text %></th>
+          <th class="cms-list__file-resize"><%= Docin::Content::Setting.human_attribute_name :file_image_resize %></th>
           <th class="cms-list__title">エラー</th>
         </tr>
       </thead>

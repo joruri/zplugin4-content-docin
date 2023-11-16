@@ -11,10 +11,45 @@ ja:
         gp_article_content_id: コンテンツ
         body_template: 本文テンプレート
         summary_template: 概要テンプレート
-
+        import_path: CSVファイルパス
+        import_user_id: 作成者ユーザー
+        column_replace: カラム読み替え
+        category_relation: カテゴリ種別読み替え
+        category_relation_type: カテゴリ照合
+        attachement_column: 添付ファイル名カラム
+        attachement_directory: 添付ファイルディレクトリ
+        doc_name: ディレクトリ名
+        doc_state: ステータス
+        title: タイトル
+        feature_1: 記事一覧表示
+        feed_state: 記事フィード表示
+        display_published_at: 公開日（表示用）
+        display_updated_at: 更新日（表示用）
+        task_publish_process_at: 公開開始日時
+        task_close_process_at: 公開終了日時
+        inquiry_state: 連絡先表示
+        event_state: イベントカレンダー表示
+        event_period: イベント期間
+        event_note: イベント備考
+        event_category: イベントカテゴリ
+        marker_state: 地図表示
+        marker_sort_no: 地図表示順
+        marker_category: マップカテゴリ
+        map_title: マップ名
+        map_coordinate: 座標
+        map_zoom: 縮尺
+        map_marker: マーカー
+        file_path: 添付ファイル
+        file_name: 添付ファイル名
+        file_title: 表示ファイル名
+        file_alt_text: 代替テキスト
+        file_image_resize: 画像リサイズ
+        default_state: デフォルトの記事ステータス
   active_hash:
     attributes:
       docin/content/setting_menu/title:
         relation: コンテンツ連携
         gp_article_relation: 記事
         gp_template_relation: テンプレート
+        import: 定期取り込み
+        columns: 基本カラム名

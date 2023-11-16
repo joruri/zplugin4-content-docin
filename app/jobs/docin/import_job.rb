@@ -4,10 +4,16 @@ class Docin::ImportJob < Sys::ProcessJob
   process_name 'docin/docs/import'
 
   def perform(content, options = {})
+    if options[:path]
+      csv = File.read(content.setting.import_path, encoding: 'Shift_JIS:UTF-8')
+    else
+      csv = options[:csv]
+    end
+
     rows = Docin::Parse::CsvInteractor.call(
       content: content,
       user: script.process.user,
-      csv: options[:csv]
+      csv: csv
     ).results
 
     script.total! rows.size

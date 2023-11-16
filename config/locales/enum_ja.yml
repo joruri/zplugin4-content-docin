@@ -1,0 +1,9 @@
+ja:
+  enum_ish:
+    docin/content/setting:
+      default_state:
+        draft: 下書き
+        public: 公開
+      category_relation_type:
+        0: カテゴリIDと照合
+        1: カテゴリ名と照合
