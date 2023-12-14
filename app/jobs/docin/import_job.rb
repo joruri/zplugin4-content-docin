@@ -5,7 +5,7 @@ class Docin::ImportJob < Sys::ProcessJob
 
   def perform(content, options = {})
     if options[:path]
-      csv = File.read(content.setting.import_path)
+      csv = NKF.nkf('-w', File.read(content.setting.import_path))
     else
       csv = options[:csv]
     end
