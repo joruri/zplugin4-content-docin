@@ -8,7 +8,7 @@ class Docin::Parse::CsvInteractor < ApplicationInteractor
     require 'csv'
     @results = CSV.parse(@csv, headers: true, skip_blanks: true, converters: lambda { |c| c&.strip } )
                   .reject { |data| data.to_h.values.all?(&:nil?) }
-                  .map { |data| Docin::Row.new(data: data) }
+                  .map { |data| Docin::Row.new(data: data, content: @content) }
 
     doc_map = load_doc_map(@results)
     @results.each do |row|
