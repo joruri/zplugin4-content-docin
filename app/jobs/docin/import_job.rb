@@ -9,6 +9,7 @@ class Docin::ImportJob < Sys::ProcessJob
     else
       csv = options[:csv]
     end
+    doc_ids = load_docs(content).state(:public).pluck(:id)
 
     rows = Docin::Parse::CsvInteractor.call(
       content: content,
@@ -17,15 +18,25 @@ class Docin::ImportJob < Sys::ProcessJob
     ).results
 
     script.total! rows.size
-
     rows.each do |row|
       script.progress! row do
+        doc_ids.reject!{|doc_id| doc_id == row&.doc&.id }
         update_doc(row)
       end
+    end
+
+    doc_ids.each_slice(500) do |partial_doc_ids|
+      GpArticle::Doc.where(id: partial_doc_ids).update_all(state: 'closed')
+      docs = GpArticle::Doc.where(id: partial_doc_ids)
+      Cms::PublishersJob.perform_later(content.site, publications: docs.flat_map(&:publications))
     end
   end
 
   private
+
+  def load_docs(content)
+    content.gp_article_content.docs
+  end
 
   def update_doc(row)
     row.doc.categorizations.each do |c|
