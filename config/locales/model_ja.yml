@@ -21,6 +21,7 @@ ja:
         doc_name: ディレクトリ名
         doc_state: ステータス
         title: タイトル
+        summary: 概要
         feature_1: 記事一覧表示
         feed_state: 記事フィード表示
         display_published_at: 公開日（表示用）

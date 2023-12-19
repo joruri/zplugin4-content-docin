@@ -12,6 +12,7 @@
           <th class="cms-list__url"><%= Docin::Content::Setting.human_attribute_name :doc_name %></th>
           <th class="cms-list__status"><%= Docin::Content::Setting.human_attribute_name :doc_state %></th>
           <th class="cms-list__title"><%= Docin::Content::Setting.human_attribute_name :title %></th>
+          <th class="cms-list__title"><%= Docin::Content::Setting.human_attribute_name :summary %></th>
           <th class="cms-list__list-status"><%= Docin::Content::Setting.human_attribute_name :feature_1 %></th>
           <th class="cms-list__feed-status"><%= Docin::Content::Setting.human_attribute_name :feature_1 %></th>
           <th class="cms-list__title">カテゴリ</th>
@@ -45,6 +46,7 @@
             <td class="cms-list__url"><%= row.name %></td>
             <td class="cms-list__status"><%= row.state_text %></td>
             <td class="cms-list__title"><%= row.title %></td>
+            <td class="cms-list__summary"><%= truncate row.doc&.summary %></td>
             <td class="cms-list__list-status"><%= row.feature_1_text %></td>
             <td class="cms-list__feed-status"><%= row.feed_state_text %></td>
             <td class="cms-list__title"><%= row.category_titles_text %></td>
