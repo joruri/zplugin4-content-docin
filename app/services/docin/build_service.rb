@@ -55,10 +55,14 @@ class Docin::BuildService < ApplicationService
     end
 
     # file
-    if @content.setting.attachement_directory.blank? || @content.setting.attachement_column.blank?
-      build_file(doc, row)
+    if @content.attachement_directory_import? && @content.setting.attachement_directory.present?
+      build_files_from_directory(doc, row)
     else
-      build_file_in_import(doc, row)
+      if @content.setting.attachement_directory.blank? || @content.setting.attachement_column.blank?
+        build_file(doc, row)
+      else
+        build_file_in_import(doc, row)
+      end
     end
 
     doc.in_ignore_accessibility_check = '1'
@@ -317,5 +321,38 @@ class Docin::BuildService < ApplicationService
       doc.files.each { |file| file.mark_for_destruction }
     end
   end
+
+  def build_files_from_directory(doc, row)
+    file_directory = @content.setting.attachement_directory.gsub(/@data\[\"(.+?)\"]/){|s| row.data[$1] }
+    if Dir.exist?(file_directory)
+      Dir.glob("#{file_directory}*").each do |f|
+        next if File.directory?(f)
+        filename = File.basename(f)
+        next if filename.blank?
+        ext = File.extname(filename)
+        en_filename = filename =~ /[^ -~｡-ﾟ]/ ? "#{Time.now.strftime("%Y%m%d%H%M%S%L")}#{ext}" : filename
+        file = doc.files.where(file_attachable: doc, title: filename).first || doc.files.build(file_attachable: doc, title: filename)
+        file.file = ActionDispatch::TempFile.create_from_path(f)
+        file.site = @content.site
+        file.name = en_filename
+        file.title = filename
+        file.tmp_id = doc.in_tmp_id
+        file.alt_text = filename
+        file.image_resize = row.file_image_resize.presence || @dest_content.setting.attachment_resize_size
+        if file.creator.blank?
+          file.build_creator
+          file.creator.user = doc.creator.user
+          file.creator.group = doc.creator.group
+        else
+          file.build_editor if file.editor.blank?
+          file.editor.user = doc.editor.user
+          file.editor.group = doc.editor.group
+        end
+      end
+    else
+      doc.files.each { |file| file.mark_for_destruction }
+    end
+  end
+
 
 end

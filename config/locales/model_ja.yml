@@ -16,8 +16,10 @@ ja:
         column_replace: カラム読み替え
         category_relation: カテゴリ種別読み替え
         category_relation_type: カテゴリ照合
+        status_relation: ステータス読み替え
         attachement_column: 添付ファイル名カラム
         attachement_directory: 添付ファイルディレクトリ
+        attachement_directory_import: 添付ファイルディレクトリ取り込み
         doc_name: ディレクトリ名
         doc_state: ステータス
         title: タイトル
@@ -46,6 +48,8 @@ ja:
         file_alt_text: 代替テキスト
         file_image_resize: 画像リサイズ
         default_state: デフォルトの記事ステータス
+        category_column_regexp: カテゴリカラムの正規表現
+        uri_base: 元記事URL
   active_hash:
     attributes:
       docin/content/setting_menu/title:

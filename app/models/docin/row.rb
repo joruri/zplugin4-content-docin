@@ -10,7 +10,11 @@ class Docin::Row < ApplicationModel
   end
 
   def state
-    state_option.last || content.setting.default_state
+    if content.status_dictionary.blank?
+      state_option.last || content.setting.default_state
+    else
+      content.status_dictionary[data[content.setting.doc_state]] || content.setting.default_state
+    end
   end
 
   def state_text
@@ -26,8 +30,8 @@ class Docin::Row < ApplicationModel
   end
 
   def category_titles_from_category_type_title(category_type_title)
-    return [] if data[content.setting.category_type_title].blank?
-    data[content.setting.category_type_title].split(/,|、/).map(&:strip).reject(&:blank?)
+    return [] if data[category_type_title].blank?
+    data[category_type_title].split(/,|、/).map(&:strip).reject(&:blank?)
   end
 
   def category_titles_from_category_type_dictionary(title)
@@ -231,8 +235,13 @@ class Docin::Row < ApplicationModel
   end
 
   def state_option
-    return [] unless %w(下書き 公開日時待ち 公開 公開終了).include?(data[content.setting.doc_state])
-    GpArticle::Doc.state_options.assoc(data[content.setting.doc_state]).presence || []
+    if content.status_dictionary.blank?
+      return [] unless %w(下書き 公開日時待ち 公開 公開終了).include?(data[content.setting.doc_state])
+      GpArticle::Doc.state_options.assoc(data[content.setting.doc_state]).presence || []
+    else
+      return [] unless %w(下書き 公開日時待ち 公開 公開終了).include?(state)
+      GpArticle::Doc.state_options.assoc(state).presence || []
+    end
   end
 
   def feature_1_option

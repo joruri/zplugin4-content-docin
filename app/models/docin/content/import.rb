@@ -20,6 +20,24 @@ class Docin::Content::Import < Cms::Content
     Sys::User.find_by(id: setting.import_user_id)
   end
 
+  def attachement_directory_import?
+    setting.attachement_directory_import == 1
+  end
+
+  def status_dictionary
+    mapping = {}
+    return {} if setting.status_relation.blank?
+    setting.status_relation.split(/\r\n|\n/).each do |line|
+      if line =~ /,/
+        data = line.split(/,/)
+        mapping[data[0].strip] = data[1].strip
+      else
+        next
+      end
+    end
+    mapping
+  end
+
   def column_replace_dictionary
     mapping = {}
     return mapping if setting.column_replace.blank?
