@@ -24,6 +24,10 @@ class Docin::Content::Import < Cms::Content
     setting.attachement_directory_import == 1
   end
 
+  def daily_import?
+    setting.daily_import == 1
+  end
+
   def status_dictionary
     mapping = {}
     return {} if setting.status_relation.blank?

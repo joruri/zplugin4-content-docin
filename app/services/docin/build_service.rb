@@ -2,6 +2,8 @@ class Docin::BuildService < ApplicationService
   def initialize(content, user)
     @content = content
     @user = user
+    @group = nil
+
 
     @dest_content = @content.gp_article_content
     @category_types = @dest_content.category_types.map do |category_type|
@@ -16,8 +18,7 @@ class Docin::BuildService < ApplicationService
   end
 
   def build(row, doc: nil)
-    doc ||= @dest_content.docs.where(name: row.name).first_or_initialize
-
+    doc ||= @dest_content.docs.where(name: row.name).where.not(state: 'trashed').first_or_initialize
     doc.state = row.state
     doc.title = row.title
     doc.body = @body_template.evaluate(data: replace_data(row))
@@ -31,9 +32,13 @@ class Docin::BuildService < ApplicationService
     doc.qrcode_state = 'visible'
     doc.feature_1 = row.feature_1 unless row.feature_1.nil?
     doc.feed_state = row.feed_state unless row.feed_state.nil?
+    doc.list_image = build_list_image(row)
 
     # template
     set_template(doc, row)
+
+    # group user
+    set_user_group(row)
 
     # creator editor
     build_creator_or_editor(doc)
@@ -48,10 +53,12 @@ class Docin::BuildService < ApplicationService
     build_map(doc, row)
 
     # category
-    if @content.setting.category_relation.blank?
-      build_categories(doc, row)
-    else
+    if @content.setting.category_relation.present?
       build_categories_in_import(doc, row)
+    elsif @content.setting.category_column_regexp.present?
+      build_categories_from_regexp(doc, row)
+    else
+      build_categories(doc, row)
     end
 
     # file
@@ -72,6 +79,20 @@ class Docin::BuildService < ApplicationService
   end
 
   private
+
+  def set_user_group(row)
+    if @content.setting.creator_group_code
+      @group = @content.site.groups.find_by(code: row.data[@content.setting.creator_group_code])
+    elsif @content.setting.creator_group_name
+      @group = @content.site.groups.find_by(name: row.data[@content.setting.creator_group_name])
+    end
+    if @content.setting.creator_user_code
+      cuser = @content.site.users.find_by(account: row.data[@content.setting.creator_user_code])
+    elsif @content.setting.creator_user_name
+      cuser = @content.site.users.find_by(name: row.data[@content.setting.creator_user_name])
+    end
+    @user = cuser || @user
+  end
 
   def replace_data(row)
     return row.data if @dictionary.blank?
@@ -116,11 +137,13 @@ class Docin::BuildService < ApplicationService
     if doc.creator.blank?
       doc.build_creator
       doc.creator.user = @user
-      doc.creator.group = @user.group
+      doc.creator.group = @group || @user.group
     else
+      doc.creator.user = @user
+      doc.creator.group = @group || @user.group
       doc.build_editor if doc.editor.blank?
       doc.editor.user = @user
-      doc.editor.group = @user.group
+      doc.editor.group = @group || @user.group
     end
   end
 
@@ -195,6 +218,29 @@ class Docin::BuildService < ApplicationService
         doc.categorizations.build(category: category, categorized_as: 'GpArticle::Doc')
       end
     end
+  end
+
+  def build_categories_from_regexp(doc, row)
+    category_column_regexp = @content.setting.category_column_regexp
+    category_ids = row.data.headers.each_with_object([]) do |key, category_ids|
+      next if key !~ /#{category_column_regexp}/
+      category_ids << row.data[key]
+    end
+    categories = GpCategory::Category.where(category_type_id: doc&.content&.category_types&.pluck(:id), name: category_ids)
+    row.category_titles = categories.pluck(:title)
+
+    doc.categorizations.each do |c|
+      if c.categorized_as == 'GpArticle::Doc' && !categories.include?(c.category)
+        c.mark_for_destruction
+      end
+    end
+
+    categories.each do |category|
+      if !doc.categorizations.detect { |c| c.category == category && c.categorized_as == 'GpArticle::Doc' }
+        doc.categorizations.build(category: category, categorized_as: 'GpArticle::Doc')
+      end
+    end
+
   end
 
   def build_categories_in_import(doc, row)
@@ -334,7 +380,7 @@ class Docin::BuildService < ApplicationService
         file = doc.files.where(file_attachable: doc, title: filename).first || doc.files.build(file_attachable: doc, title: filename)
         file.file = ActionDispatch::TempFile.create_from_path(f)
         file.site = @content.site
-        file.name = en_filename
+        file.name = en_filename || file.name
         file.title = filename
         file.tmp_id = doc.in_tmp_id
         file.alt_text = filename
@@ -354,5 +400,8 @@ class Docin::BuildService < ApplicationService
     end
   end
 
-
+  def build_list_image(row)
+    return nil if @content.setting.list_image.blank?
+    @content.setting.list_image.gsub(/@data\[\"(.+?)\"]/){|s| row.data[$1] }
+  end
 end

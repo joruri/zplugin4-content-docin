@@ -15,7 +15,11 @@
           <th class="cms-list__title"><%= Docin::Content::Setting.human_attribute_name :summary %></th>
           <th class="cms-list__list-status"><%= Docin::Content::Setting.human_attribute_name :feature_1 %></th>
           <th class="cms-list__feed-status"><%= Docin::Content::Setting.human_attribute_name :feature_1 %></th>
+          <th class="cms-list__title">元記事URL</th>
           <th class="cms-list__title">カテゴリ</th>
+          <th class="cms-list__create-edit-group"><%= GpArticle::Doc.human_attribute_name(:creator_or_editor_group_name) %></th>
+          <th class="cms-list__create-edit-user"><%= GpArticle::Doc.human_attribute_name(:creator_or_editor_name) %></th>
+          <th class="cms-list__create-edit-date"><%= sort_link_to GpArticle::Doc.human_attribute_name(:created_or_updated_at), key: 'updated_at' %></th>
           <th class="cms-list__display-publish-date"><%= Docin::Content::Setting.human_attribute_name :display_published_at %></th>
           <th class="cms-list__display-update-date"><%= Docin::Content::Setting.human_attribute_name :display_updated_at %></th>
           <th class="cms-list__publish-process-date"><%= Docin::Content::Setting.human_attribute_name :task_publish_process_at %></th>
@@ -49,7 +53,11 @@
             <td class="cms-list__summary"><%= truncate row.doc&.summary %></td>
             <td class="cms-list__list-status"><%= row.feature_1_text %></td>
             <td class="cms-list__feed-status"><%= row.feed_state_text %></td>
+            <td class="cms-list__title"><%= row.doc_uri %></td>
             <td class="cms-list__title"><%= row.category_titles_text %></td>
+            <td class="cms-list__create-edit-group"><%= row.doc&.creator_or_editor_group_name %></td>
+            <td class="cms-list__create-edit-user"><%= row.doc&.creator_or_editor_name %></td>
+            <td class="cms-list__create-edit-date"><%=l row.doc&.created_or_updated_at %></td>
             <td class="cms-list__display-publish-date"><%=l row.display_published_at %></td>
             <td class="cms-list__display-update-date"><%=l row.display_updated_at %></td>
             <td class="cms-list__publish-process-date"><%=l row.task_publish_process_at %></td>

@@ -4,6 +4,7 @@ module Zplugin
       class Engine < ::Rails::Engine
         engine_name 'zplugin_content_docin'
         isolate_namespace Zplugin::Content::Docin
+        config.eager_load_paths += %W(#{config.root}/lib/autoloads)
 
         config.after_initialize do |app|
           app.config.assets.precompile += %w(docin/admin.js docin/admin.css)

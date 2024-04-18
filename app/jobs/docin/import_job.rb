@@ -23,6 +23,21 @@ class Docin::ImportJob < Sys::ProcessJob
         doc_ids.reject!{|doc_id| doc_id == row&.doc&.id }
         update_doc(row)
       end
+      if rdoc = row&.doc
+        cdoc = Zplugin::Content::Docin::Doc.find_or_initialize_by(uri_path: row.doc_uri)
+        cdoc.docable = rdoc
+        cdoc.content = rdoc.content
+        cdoc.body    = rdoc.body
+        cdoc.docable = rdoc
+        cdoc.doc_name = rdoc.name
+        cdoc.doc_public_uri = rdoc.public_uri
+        cdoc.published_at = rdoc.published_at
+        cdoc.title = rdoc.title
+        cdoc.page_updated_at = rdoc.updated_at
+        cdoc.page_published_at = rdoc.published_at
+        cdoc.updated_at = Time.now
+        cdoc.save
+      end
     end
 
     doc_ids.each_slice(500) do |partial_doc_ids|
@@ -30,6 +45,7 @@ class Docin::ImportJob < Sys::ProcessJob
       docs = GpArticle::Doc.where(id: partial_doc_ids)
       Cms::PublishersJob.perform_later(content.site, publications: docs.flat_map(&:publications))
     end
+    Docin::LinkJob.perform_now(content)
   end
 
   private

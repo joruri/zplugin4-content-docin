@@ -10,3 +10,6 @@ ja:
       attachement_directory_import:
         0: 無効
         1: 有効
+      daily_import:
+        0: 無効
+        1: 有効

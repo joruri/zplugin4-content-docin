@@ -18,7 +18,7 @@ class Zplugin::Content::Docin::Doc < ApplicationRecord
   def latest_doc
     return nil unless docable_type
     return @latest_doc if @latest_doc
-    @latest_doc = docable_type.constantize.where(content_id: content_id, name: doc_name).order(updated_at: :desc).first
+    @latest_doc = docable_type.constantize.where(content_id: content_id, name: doc_name).where.not(state: 'trashed').order(updated_at: :desc).first
   end
 
   def source_uri

@@ -15,6 +15,7 @@ class Docin::Content::Setting < Cms::ContentSetting
   attr_json :attachement_column, :string
   attr_json :attachement_directory, :string
   attr_json :attachement_directory_import, :integer, enum: [0, 1], default: 0
+  attr_json :daily_import, :integer, enum: [0, 1], default: 0
 
   attr_json :doc_name, :string, default: "ディレクトリ名"
   attr_json :doc_state, :string, default: "ステータス"
@@ -42,9 +43,16 @@ class Docin::Content::Setting < Cms::ContentSetting
   attr_json :file_title, :string, default: "表示ファイル名"
   attr_json :file_alt_text, :string, default: "代替テキスト"
   attr_json :file_image_resize, :string, default: "画像リサイズ"
+  attr_json :creator_group_code, :string
+  attr_json :creator_group_name, :string
+  attr_json :creator_user_code, :string
+  attr_json :creator_user_name, :string
+  attr_json :list_image, :string
 
   attr_json :category_column_regexp, :string
   attr_json :uri_base, :string
+
+
 
   attr_json_belongs_to :gp_article_content, class_name: 'GpArticle::Content::Doc'
   attr_json_belongs_to :import_user, class_name: 'Sys::User'

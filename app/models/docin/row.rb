@@ -11,7 +11,7 @@ class Docin::Row < ApplicationModel
 
   def state
     if content.status_dictionary.blank?
-      state_option.last || content.setting.default_state
+      data[content.setting.doc_state] || content.setting.default_state
     else
       content.status_dictionary[data[content.setting.doc_state]] || content.setting.default_state
     end
@@ -227,6 +227,12 @@ class Docin::Row < ApplicationModel
     end
   end
 
+  def doc_uri
+    return nil if content.setting.uri_base.blank?
+    uri = content.setting.uri_base.gsub(/@data\[\"(.+?)\"]/){|s| data[$1] }
+    uri
+  end
+
   private
 
   def map_coordinates
@@ -235,13 +241,7 @@ class Docin::Row < ApplicationModel
   end
 
   def state_option
-    if content.status_dictionary.blank?
-      return [] unless %w(下書き 公開日時待ち 公開 公開終了).include?(data[content.setting.doc_state])
-      GpArticle::Doc.state_options.assoc(data[content.setting.doc_state]).presence || []
-    else
-      return [] unless %w(下書き 公開日時待ち 公開 公開終了).include?(state)
-      GpArticle::Doc.state_options.assoc(state).presence || []
-    end
+    GpArticle::Doc.state_options.find{ |o| o.last == state } || []
   end
 
   def feature_1_option

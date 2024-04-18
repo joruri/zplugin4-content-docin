@@ -12,7 +12,7 @@ ja:
         body_template: 本文テンプレート
         summary_template: 概要テンプレート
         import_path: CSVファイルパス
-        import_user_id: 作成者ユーザー
+        import_user_id: デフォルト作成者ユーザー
         column_replace: カラム読み替え
         category_relation: カテゴリ種別読み替え
         category_relation_type: カテゴリ照合
@@ -50,11 +50,17 @@ ja:
         default_state: デフォルトの記事ステータス
         category_column_regexp: カテゴリカラムの正規表現
         uri_base: 元記事URL
+        creator_group_code: 作成者グループコード
+        creator_group_name: 作成者グループ名
+        creator_user_code: 作成者ユーザーID
+        creator_user_name: 作成者ユーザー名
+        list_image: メイン画像
+        daily_import: 定期取り込み
   active_hash:
     attributes:
       docin/content/setting_menu/title:
         relation: コンテンツ連携
         gp_article_relation: 記事
         gp_template_relation: テンプレート
-        import: 定期取り込み
+        import: 取り込み設定
         columns: 基本カラム名
