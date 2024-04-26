@@ -402,6 +402,7 @@ class Docin::BuildService < ApplicationService
 
   def build_list_image(row)
     return nil if @content.setting.list_image.blank?
-    @content.setting.list_image.gsub(/@data\[\"(.+?)\"]/){|s| row.data[$1] }
+    list_image = @content.setting.list_image.gsub(/@data\[\"(.+?)\"]/){|s| row.data[$1] }
+    list_image = list_image == '.' ? nil : list_image
   end
 end

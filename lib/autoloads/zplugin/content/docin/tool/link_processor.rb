@@ -6,6 +6,16 @@ class Zplugin::Content::Docin::Tool::LinkProcessor
     @site = content.site
   end
 
+  def list_image(doc)
+    return self if doc.list_image.blank?
+    filename = doc.list_image
+    file = doc.files.find_by(title: filename)
+    if file.present?
+      doc.update_columns(list_image: file.name)
+    end
+    return self
+  end
+
   def sublink(cdoc)
     @body = cdoc.body.dup
     @after_body = cdoc.body.dup
@@ -88,10 +98,11 @@ class Zplugin::Content::Docin::Tool::LinkProcessor
     doc.keep_display_updated_at = true
     doc.in_ignore_accessibility_check = '1'
     doc.in_ignore_link_check = '1'
-
+    GpArticle::Doc.record_timestamps = false
     unless doc.save
       #
     end
+    GpArticle::Doc.record_timestamps = true
 
     return self
   end
@@ -133,11 +144,7 @@ private
 
   def convert_file_link(cdoc, uri, clink)
     filename = File.basename(uri.path)
-    if filename =~ /^[0-9a-zA-Z\-\s\._\+]*$/
-      denc_filename = filename
-    else
-      denc_filename = URI.decode_www_form_component(filename)
-    end
+    denc_filename = Addressable::URI.unescape(filename)
     doc = cdoc.latest_doc
     return if doc.blank?
     file = doc.files.find_by(title: denc_filename)

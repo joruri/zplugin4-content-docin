@@ -11,6 +11,7 @@ class Docin::LinkJob < Sys::ProcessJob
       cdocs.each do |cdoc|
         if doc = cdoc.latest_doc
           Zplugin::Content::Docin::Tool::LinkProcessor.new(content).sublink(cdoc)
+          Zplugin::Content::Docin::Tool::LinkProcessor.new(content).list_image(doc)
         end
       end
     end
