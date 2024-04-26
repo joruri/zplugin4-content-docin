@@ -57,6 +57,7 @@ class Docin::Content::SettingField < Cms::Content::SettingField
     add_item :category_column_regexp, :text
     add_item :uri_base, :text
     add_item :list_image, :text
+    add_item :file_doc_id_regexp, :text
   end
 
 end

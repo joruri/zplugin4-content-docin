@@ -56,6 +56,7 @@ ja:
         creator_user_name: 作成者ユーザー名
         list_image: メイン画像
         daily_import: 定期取り込み
+        file_doc_id_regexp: 記事ID正規表現
   active_hash:
     attributes:
       docin/content/setting_menu/title:

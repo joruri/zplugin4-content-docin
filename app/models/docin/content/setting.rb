@@ -51,8 +51,7 @@ class Docin::Content::Setting < Cms::ContentSetting
 
   attr_json :category_column_regexp, :string
   attr_json :uri_base, :string
-
-
+  attr_json :file_doc_id_regexp, :string
 
   attr_json_belongs_to :gp_article_content, class_name: 'GpArticle::Content::Doc'
   attr_json_belongs_to :import_user, class_name: 'Sys::User'

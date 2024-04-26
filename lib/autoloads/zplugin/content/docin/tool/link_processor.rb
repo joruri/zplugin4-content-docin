@@ -123,7 +123,6 @@ private
       linked_cdoc = Zplugin::Content::Docin::Doc.in_site(@site).where(uri_path: "#{path}.html").first
     end
 
-
     if linked_cdoc
       clink.after_url = linked_cdoc.doc_public_uri
       clink.after_url += '#' + uri.fragment if uri.fragment
@@ -134,14 +133,27 @@ private
 
   def convert_file_link(cdoc, uri, clink)
     filename = File.basename(uri.path)
-    denc_filename = URI.decode_www_form_component(filename)
+    if filename =~ /^[0-9a-zA-Z\-\s\._\+]*$/
+      denc_filename = filename
+    else
+      denc_filename = URI.decode_www_form_component(filename)
+    end
     doc = cdoc.latest_doc
     return if doc.blank?
     file = doc.files.find_by(title: denc_filename)
     if file.present?
       clink.after_url = "file_contents/#{file.name}"
     else
-      #
+      if @content.setting.file_doc_id_regexp.present?
+        doc_id = uri.path.to_s.gsub(/#{@content.file_doc_id_regexp}/, '\1')
+        return if doc_id.blank?
+        other_doc = doc.content.docs.find_by(name: doc_id)
+        return if other_doc.blank?
+        file = other_doc.files.find_by(title: denc_filename)
+        if file.present?
+          clink.after_url = "#{other_doc.public_uri}file_contents/#{file.name}"
+        end
+      end
     end
   end
 

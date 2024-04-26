@@ -376,7 +376,7 @@ class Docin::BuildService < ApplicationService
         filename = File.basename(f)
         next if filename.blank?
         ext = File.extname(filename)
-        en_filename = filename =~ /[^ -~｡-ﾟ]/ ? "#{Time.now.strftime("%Y%m%d%H%M%S%L")}#{ext}" : filename
+        en_filename = filename =~ /^[0-9a-zA-Z\-\s\._]*$/ ? filename : "#{Time.now.strftime("%Y%m%d%H%M%S%L")}#{ext}"
         file = doc.files.where(file_attachable: doc, title: filename).first || doc.files.build(file_attachable: doc, title: filename)
         file.file = ActionDispatch::TempFile.create_from_path(f)
         file.site = @content.site
