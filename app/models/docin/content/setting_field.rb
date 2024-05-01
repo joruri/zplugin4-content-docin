@@ -44,7 +44,8 @@ class Docin::Content::SettingField < Cms::Content::SettingField
   end
 
   menu :import do
-    add_item  :daily_import, :radio
+    add_item :daily_import, :radio
+    add_item :auto_closure, :radio
     add_item :import_path, :text
     add_item :import_user_id, :select
     add_item :column_replace, :text_area, lower_text: '対象カラム,値,変換先'

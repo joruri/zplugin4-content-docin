@@ -119,7 +119,7 @@ private
   end
 
   def convert_doc_link(uri, clink)
-    return if uri.scheme == 'http' || uri.scheme == 'https'
+    #return if uri.scheme == 'http' || uri.scheme == 'https'
     query = uri.query.present? ? "?#{uri.query}" : ""
     path = "#{uri.path}#{query}"
     #escaped_path = Addressable::URI.unescape("#{uri.host}#{uri.path}")

@@ -4,6 +4,9 @@ class Docin::ImportJob < Sys::ProcessJob
   process_name 'docin/docs/import'
 
   def perform(content, options = {})
+    log = content.log || content.create_log
+    last_updated_at = log.parse_start_at
+    log.set_status({ parse_state: "start", parse_start_at: Time.now, parse_end_at: nil, last_updated_at: last_updated_at })
     if options[:path]
       csv = NKF.nkf('-w', File.read(content.setting.import_path))
     else
@@ -11,6 +14,7 @@ class Docin::ImportJob < Sys::ProcessJob
     end
     doc_ids = load_docs(content).state(:public).pluck(:id)
 
+    log.set_status({parse_state: "parse"})
     rows = Docin::Parse::CsvInteractor.call(
       content: content,
       user: script.process.user,
@@ -39,12 +43,14 @@ class Docin::ImportJob < Sys::ProcessJob
         cdoc.save
       end
     end
-
-    doc_ids.each_slice(500) do |partial_doc_ids|
-      GpArticle::Doc.where(id: partial_doc_ids).update_all(state: 'closed')
-      docs = GpArticle::Doc.where(id: partial_doc_ids)
-      Cms::PublishersJob.perform_later(content.site, publications: docs.flat_map(&:publications))
+    if content.auto_closure?
+      doc_ids.each_slice(500) do |partial_doc_ids|
+        GpArticle::Doc.where(id: partial_doc_ids).update_all(state: 'closed')
+        docs = GpArticle::Doc.where(id: partial_doc_ids)
+        Cms::PublishersJob.perform_later(content.site, publications: docs.flat_map(&:publications))
+      end
     end
+    log.set_status({parse_state: "link"})
     Docin::LinkJob.perform_now(content)
   end
 

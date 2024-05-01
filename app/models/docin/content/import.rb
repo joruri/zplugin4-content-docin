@@ -4,6 +4,8 @@ class Docin::Content::Import < Cms::Content
   has_one :setting, foreign_key: :content_id, class_name: 'Docin::Content::Setting', dependent: :destroy
   delegate_attr_json_for :setting
 
+  has_one :log, class_name: 'Zplugin::Content::Docin::Log', foreign_key: :content_id, dependent: :destroy
+
   def gp_article_content
     setting.gp_article_content
   end
@@ -26,6 +28,10 @@ class Docin::Content::Import < Cms::Content
 
   def daily_import?
     setting.daily_import == 1
+  end
+
+  def auto_closure?
+    setting.auto_closure == 1
   end
 
   def status_dictionary

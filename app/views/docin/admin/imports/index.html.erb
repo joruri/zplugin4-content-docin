@@ -1,3 +1,4 @@
+<h2 class="cms-action-title">アップロード</h2>
 <%= form_with model: @item, scope: :item, url: { action: :create }, html: { method: :post, multipart: true } do |f| %>
   <%= render 'form', f: f %>
   <div class="cms-submitters">

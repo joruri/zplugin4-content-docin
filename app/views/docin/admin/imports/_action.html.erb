@@ -1,2 +1,6 @@
 <div class="cms-action-menu">
+<%- case action_name -%>
+<%- when 'index' -%>
+  <%= link_to :import, { action: :start }, method: :get, data: { confirm: 'サーバー上のCSVファイル取り込みを開始します。' } if @policy.allowed(:new?) %>
+<%- end -%>
 </div>

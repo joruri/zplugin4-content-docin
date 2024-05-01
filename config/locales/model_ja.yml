@@ -57,6 +57,7 @@ ja:
         list_image: メイン画像
         daily_import: 定期取り込み
         file_doc_id_regexp: 記事ID正規表現
+        auto_closure: 取り込み後非公開処理
   active_hash:
     attributes:
       docin/content/setting_menu/title:

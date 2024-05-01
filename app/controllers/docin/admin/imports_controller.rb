@@ -15,6 +15,17 @@ class Docin::Admin::ImportsController < Docin::Admin::BaseController
     end
   end
 
+  def start
+    if @content.setting.import_path.blank?
+      return redirect_to url_for(action: :index), notice: "CSVファイルのパスを設定してください。"
+    end
+    if !File.exist?(@content.setting.import_path)
+      return redirect_to url_for(action: :index), notice: "CSVファイルがありません。"
+    end
+    Docin::ImportJob.perform_later(@content, user: core.user, path: @content.setting.import_path)
+    return redirect_to url_for(action: :index), notice: "取り込みを開始しました。"
+  end
+
   private
 
   def confirm

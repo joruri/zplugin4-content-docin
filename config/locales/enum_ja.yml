@@ -13,3 +13,6 @@ ja:
       daily_import:
         0: 無効
         1: 有効
+      auto_closure:
+        0: 無効
+        1: 有効

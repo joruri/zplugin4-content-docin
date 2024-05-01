@@ -1,0 +1,37 @@
+<%
+list_image = @data["JPN.main_photo_sec.main_photo_file_name"].@data["JPN.main_photo_sec.main_photo_file_extension"]
+list_image = list_image == '.' ? nil : list_image
+%>
+<% if list_image.present? %>
+<div class="title-image"><img src="<%=list_image%>" /></div>
+<%- end %>
+<%- 0.upto(200){|i|
+  text_content = @data["JPN.contents_sec.text_content_sec[#{i}].text_content"]
+  type =  @data["JPN.contents_sec.text_content_sec[#{i}].text_type"]
+-%>
+<%- case type
+    when 'T1' -%>
+<h1><%= text_content.gsub(/\\r\\n/, '<br />').gsub(/\\n/, '<br />') if text_content.present? %> </h1>
+<%- when 'T2' -%>
+<h2><%= text_content.gsub(/\\r\\n/, '<br />').gsub(/\\n/, '<br />') if text_content.present? %> </h2>
+<%- when 'C' -%>
+<p><%= text_content.gsub(/\\r\\n/, '<br />').gsub(/\\n/, '<br />') if text_content.present? %></p>
+<%- when 'L'
+  display_name = @data["JPN.contents_sec.text_content_sec[#{i}].link_display_name"]
+  link_url = @data["JPN.contents_sec.text_content_sec[#{i}].link_url"]
+  next if display_name.blank?
+  next if link_url.blank?
+ -%>
+<p><a href="<%=link_url%>" target="_blank"><%=display_name%></a></p>
+<%- when 'I'
+photo_file_extension = @data["JPN.contents_sec.text_content_sec[#{i}].add_photo_file_extension"]
+photo_file_name = @data["JPN.contents_sec.text_content_sec[#{i}].add_photo_file_name"]
+next if photo_file_extension.blank? || photo_file_name.blank?
+-%>
+<p><img src="<%=photo_file_name%>.<%=photo_file_extension%>" /></p>
+<p><%= @data["JPN.contents_sec.text_content_sec[#{i}].add_photo_remarks"] %></p>
+<%- end %>
+<%- } %>
+
+
+<%= @data["JPN.contents_sec.html_content_sec.html_content"].gsub(/\\r\\n/, '<br />').gsub(/\\n/, '<br />')%>
