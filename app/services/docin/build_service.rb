@@ -18,7 +18,8 @@ class Docin::BuildService < ApplicationService
   end
 
   def build(row, doc: nil)
-    doc ||= @dest_content.docs.where(name: row.name).where.not(state: 'trashed').first_or_initialize
+    doc_content = @dest_content
+    doc ||= doc_content.docs.where(name: row.name).where.not(state: 'trashed').first_or_initialize
     doc.state = row.state
     doc.title = row.title
     doc.body = @body_template.evaluate(data: replace_data(row))

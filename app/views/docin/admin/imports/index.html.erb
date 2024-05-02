@@ -5,3 +5,24 @@
     <%= f.submit :confirm %>
   </div>
 <% end %>
+<% if @log %>
+<h2 class="cms-action-title">取り込みステータス</h2>
+<table class="cms-detail">
+  <tr>
+    <th>状態</th>
+    <td><%= @log.parse_state_text %></td>
+  </tr>
+  <tr>
+    <th>開始日</th>
+    <td><%=l @log.parse_start_at %></td>
+  </tr>
+  <tr>
+    <th>終了日</th>
+    <td><%=l @log.parse_end_at %></td>
+  </tr>
+  <tr>
+    <th>件数（成功/失敗/合計）</th>
+    <td><%= @log.register_success %>　/　<%= @log.register_failure %>　/　<%= @log.register_total %></td>
+  </tr>
+</table>
+<% end %>

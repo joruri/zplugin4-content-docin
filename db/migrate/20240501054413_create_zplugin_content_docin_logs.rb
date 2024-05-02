@@ -9,6 +9,12 @@ class CreateZpluginContentDocinLogs < ActiveRecord::Migration[5.0]
       t.timestamp     :parse_start_at
       t.timestamp     :parse_end_at
       t.timestamp     :last_updated_at
+      t.integer       :parse_total
+      t.integer       :parse_success
+      t.integer       :parse_failure
+      t.integer       :register_total
+      t.integer       :register_success
+      t.integer       :register_failure
       t.timestamps
     end
   end

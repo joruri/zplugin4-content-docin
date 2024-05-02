@@ -5,6 +5,7 @@ class Docin::Admin::ImportsController < Docin::Admin::BaseController
   end
 
   def index
+    @log = @content.log
   end
 
   def create

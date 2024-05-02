@@ -16,3 +16,9 @@ ja:
       auto_closure:
         0: 無効
         1: 有効
+    zplugin/content/docin/log:
+      parse_state:
+        start: 開始
+        parse: データ登録中
+        link: リンク解析中
+        end: 終了

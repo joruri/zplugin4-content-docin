@@ -6,7 +6,9 @@ class Docin::ImportJob < Sys::ProcessJob
   def perform(content, options = {})
     log = content.log || content.create_log
     last_updated_at = log.parse_start_at
-    log.set_status({ parse_state: "start", parse_start_at: Time.now, parse_end_at: nil, last_updated_at: last_updated_at })
+    default_values = { parse_state: "start", parse_start_at: Time.now, parse_end_at: nil, last_updated_at: last_updated_at,
+    register_total: 0, register_success: 0, register_failure: 0 }
+    log.set_status(default_values)
     if options[:path]
       csv = NKF.nkf('-w', File.read(content.setting.import_path))
     else
@@ -20,13 +22,22 @@ class Docin::ImportJob < Sys::ProcessJob
       user: script.process.user,
       csv: csv
     ).results
-
+    register_total = 0
+    register_success = 0
+    register_failure = 0
     script.total! rows.size
     rows.each do |row|
+      register_total += 1
       script.progress! row do
         doc_ids.reject!{|doc_id| doc_id == row&.doc&.id }
-        update_doc(row)
+        if update_doc(row)
+          register_success += 1
+        else
+          register_failure += 1
+        end
       end
+      log.set_status(register_total: register_total, register_success: register_success, register_failure: register_failure)
+
       if rdoc = row&.doc
         cdoc = Zplugin::Content::Docin::Doc.find_or_initialize_by(uri_path: row.doc_uri)
         cdoc.docable = rdoc
@@ -73,8 +84,13 @@ class Docin::ImportJob < Sys::ProcessJob
     row.doc.files.each do |file|
       file.destroy if file.marked_for_destruction?
     end
-    if row.doc.save && (row.doc.state_public? || row.doc.state_closed?)
-      Docin::PublisherJob.perform_later(row.doc)
+    if row.doc.save
+      if  (row.doc.state_public? || row.doc.state_closed?)
+        Docin::PublisherJob.perform_later(row.doc)
+      end
+      return true
+    else
+      return false
     end
   end
 end
