@@ -12,6 +12,8 @@ class Docin::Content::Setting < Cms::ContentSetting
   attr_json :category_relation, :text
   attr_json :category_relation_type, :integer, enum: [0, 1], default: 1
   attr_json :status_relation, :text
+  attr_json :org_relation, :text
+  attr_json :org_inquiry_relation_type, :integer, enum: [0, 1, 2], default: 0
   attr_json :attachement_column, :string
   attr_json :attachement_directory, :string
   attr_json :attachement_directory_import, :integer, enum: [0, 1], default: 0
@@ -52,6 +54,12 @@ class Docin::Content::Setting < Cms::ContentSetting
   attr_json :category_column_regexp, :string
   attr_json :uri_base, :string
   attr_json :file_doc_id_regexp, :string
+
+  attr_json :quota_column, :string
+  attr_json :quota_dictionary, :text
+
+  attr_json :delete_flg, :text
+  attr_json :check_state_in_validation, :boolean, default: true
 
   attr_json :auto_closure, :integer, enum: [0, 1], default: 0
 

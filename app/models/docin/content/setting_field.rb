@@ -38,6 +38,7 @@ class Docin::Content::SettingField < Cms::Content::SettingField
     add_item :creator_group_name, :text
     add_item :creator_user_code, :text
     add_item :creator_user_name, :text
+    add_item :delete_flg, :text
   end
 
   menu :gp_template_relation do
@@ -46,6 +47,7 @@ class Docin::Content::SettingField < Cms::Content::SettingField
   menu :import do
     add_item :daily_import, :radio
     add_item :auto_closure, :radio
+    add_item :check_state_in_validation, :check_box
     add_item :import_path, :text
     add_item :import_user_id, :select
     add_item :column_replace, :text_area, lower_text: '対象カラム,値,変換先'
@@ -59,6 +61,10 @@ class Docin::Content::SettingField < Cms::Content::SettingField
     add_item :uri_base, :text
     add_item :list_image, :text
     add_item :file_doc_id_regexp, :text
+    add_item :quota_column, :text
+    add_item :quota_dictionary, :text_area, lower_text: '値,振り分け先コンテンツID'
+    add_item :org_relation, :text_area, lower_text: '所属ID,振り替え後所属ID'
+    add_item :org_inquiry_relation_type, :radio
   end
 
 end

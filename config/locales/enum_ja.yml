@@ -16,6 +16,10 @@ ja:
       auto_closure:
         0: 無効
         1: 有効
+      org_inquiry_relation_type:
+        0: 振り替え後の連絡先のみ登録する
+        1: 振り替え前と振り替え後の連絡先を登録する
+        2: 振り替え前の連絡先を登録する
     zplugin/content/docin/log:
       parse_state:
         start: 開始

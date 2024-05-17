@@ -58,6 +58,14 @@ ja:
         daily_import: 定期取り込み
         file_doc_id_regexp: 記事ID正規表現
         auto_closure: 取り込み後非公開処理
+        quota_column: コンテンツ振り分けカラム
+        quota_dictionary: 振り分け設定
+        org_relation: グループ読み替え
+        org_inquiry_relation_type: 読み替え時の連絡先
+        delete_flg: 削除フラグ
+        check_state_in_validation: ステータス
+        check_state_in_validation_true: 下書きから公開終了への変更を許可しない
+        check_state_in_validation_false: 下書きから公開終了への変更を許可する
   active_hash:
     attributes:
       docin/content/setting_menu/title:

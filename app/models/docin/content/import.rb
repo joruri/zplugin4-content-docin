@@ -34,6 +34,34 @@ class Docin::Content::Import < Cms::Content
     setting.auto_closure == 1
   end
 
+  def org_dictionary
+    mapping = {}
+    return {} if setting.org_relation.blank?
+    setting.org_relation.split(/\r\n|\n/).each do |line|
+      if line =~ /,/
+        data = line.split(/,/)
+        mapping[data[0].strip] = data[1].strip
+      else
+        next
+      end
+    end
+    mapping
+  end
+
+  def quota_content_dictionary
+    mapping = {}
+    return {} if setting.quota_dictionary.blank?
+    setting.quota_dictionary.split(/\r\n|\n/).each do |line|
+      if line =~ /,/
+        data = line.split(/,/)
+        mapping[data[0].strip] = data[1].strip
+      else
+        next
+      end
+    end
+    mapping
+  end
+
   def status_dictionary
     mapping = {}
     return {} if setting.status_relation.blank?

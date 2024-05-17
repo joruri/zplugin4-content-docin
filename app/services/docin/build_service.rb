@@ -18,8 +18,12 @@ class Docin::BuildService < ApplicationService
   end
 
   def build(row, doc: nil)
-    doc_content = @dest_content
-    doc ||= doc_content.docs.where(name: row.name).where.not(state: 'trashed').first_or_initialize
+    doc_content = set_doc_content(@content, @dest_content, row)
+    if @content.setting.quota_column.present? && @dest_content.id != doc_content.id
+      doc = doc_content.docs.where(name: row.name).where.not(state: 'trashed').first_or_initialize
+    else
+      doc ||= doc_content.docs.where(name: row.name).where.not(state: 'trashed').first_or_initialize
+    end
     doc.state = row.state
     doc.title = row.title
     doc.body = @body_template.evaluate(data: replace_data(row))
@@ -81,9 +85,19 @@ class Docin::BuildService < ApplicationService
 
   private
 
+  def set_doc_content(content, dest_content, row)
+    if content.setting.quota_column.present?
+      content_id = content.quota_content_dictionary[row.data[content.setting.quota_column]]
+      set_content = GpArticle::Content::Doc.find_by(id: content_id)
+      return set_content if set_content.present?
+    end
+    return dest_content
+  end
+
   def set_user_group(row)
     if @content.setting.creator_group_code
-      @group = @content.site.groups.find_by(code: row.data[@content.setting.creator_group_code])
+      org_code = @content.org_dictionary[row.data[@content.setting.creator_group_code]] || row.data[@content.setting.creator_group_code]
+      @group = @content.site.groups.find_by(code: org_code)
     elsif @content.setting.creator_group_name
       @group = @content.site.groups.find_by(name: row.data[@content.setting.creator_group_name])
     end
@@ -153,6 +167,18 @@ class Docin::BuildService < ApplicationService
       doc.inquiries.build
       inquiry = doc.inquiries[0]
       inquiry.group = doc.creator.group
+    else
+      inquiry = doc.inquiries[0]
+      inquiry.group = doc.creator.group
+    end
+    old_group =  @content.site.groups.find_by(code: row.data[@content.setting.creator_group_code])
+    if old_group.present?
+      if @content.setting.org_inquiry_relation_type == 1
+        inquiry2 = doc.inquiries[1] || doc.inquiries.build
+        inquiry2.group = old_group
+      elsif @content.setting.org_inquiry_relation_type == 2
+        inquiry.group = old_group
+      end
     end
 
     doc.inquiries.each do |inquiry|

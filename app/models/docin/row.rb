@@ -11,10 +11,11 @@ class Docin::Row < ApplicationModel
 
   def state
     if content.status_dictionary.blank?
-      data[content.setting.doc_state] || content.setting.default_state
+      row_state = data[content.setting.doc_state] || content.setting.default_state
     else
-      content.status_dictionary[data[content.setting.doc_state]] || content.setting.default_state
+      row_state = content.status_dictionary[data[content.setting.doc_state]] || content.setting.default_state
     end
+    content.setting.delete_flg.present? && data[content.setting.delete_flg].to_i == 1 ? "trashed" : row_state
   end
 
   def state_text
@@ -220,10 +221,10 @@ class Docin::Row < ApplicationModel
     doc.validate
 
     if doc.name.blank?
-      doc.errors.add(:base, "#{NAME}を入力してください")
+      doc.errors.add(:base, "ディレクトリを入力してください")
     end
-    if doc.state_closed? && doc.state_was == 'draft'
-      doc.errors.add(:base, "#{STATE}は下書きから公開終了に変更できません")
+    if content.setting.check_state_in_validation && doc.state_closed? && doc.state_was == 'draft'
+      doc.errors.add(:base, "ステータスは下書きから公開終了に変更できません")
     end
   end
 
