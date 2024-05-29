@@ -176,7 +176,7 @@ class Docin::Row < ApplicationModel
   end
 
   def map_zoom
-    data[content.setting.map_zoom]
+    data[content.setting.map_zoom] || 14
   end
 
   def map_markers
