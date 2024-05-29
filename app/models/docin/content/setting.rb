@@ -5,12 +5,15 @@ class Docin::Content::Setting < Cms::ContentSetting
   attr_json :body_template, :string
   attr_json :summary_template, :string
   attr_json :default_state, :string, enum: [:draft, :public], default: :draft
+  attr_json :default_category_id, :string
   attr_json :template_values, ActiveModel::Type::Value.new, default: {}
   attr_json :import_path, :string
   attr_json :import_user_id, :integer
   attr_json :column_replace, :text
   attr_json :category_relation, :text
   attr_json :category_relation_type, :integer, enum: [0, 1], default: 1
+  attr_json :category_id_relation, :text
+  attr_json :map_category_id_relation, :text
   attr_json :status_relation, :text
   attr_json :org_relation, :text
   attr_json :org_inquiry_relation_type, :integer, enum: [0, 1, 2], default: 0
@@ -61,7 +64,11 @@ class Docin::Content::Setting < Cms::ContentSetting
   attr_json :delete_flg, :text
   attr_json :check_state_in_validation, :boolean, default: true
 
+  attr_json :skip_task_publish, :boolean, default: true
+
   attr_json :auto_closure, :integer, enum: [0, 1], default: 0
+  attr_json :auto_publisher, :integer, enum: [0, 1], default: 0
+
 
   attr_json_belongs_to :gp_article_content, class_name: 'GpArticle::Content::Doc'
   attr_json_belongs_to :import_user, class_name: 'Sys::User'

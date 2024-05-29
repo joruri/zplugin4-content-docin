@@ -5,6 +5,7 @@ class Docin::Content::SettingField < Cms::Content::SettingField
     add_item :body_template, :text_area
     add_item :summary_template, :text_area
     add_item :default_state, :radio
+    add_item :default_category_id, :text
   end
 
   menu :columns do
@@ -47,12 +48,15 @@ class Docin::Content::SettingField < Cms::Content::SettingField
   menu :import do
     add_item :daily_import, :radio
     add_item :auto_closure, :radio
+    add_item :auto_publisher, :radio
     add_item :check_state_in_validation, :check_box
     add_item :import_path, :text
     add_item :import_user_id, :select
     add_item :column_replace, :text_area, lower_text: '対象カラム,値,変換先'
     add_item :category_relation, :text_area, lower_text: '対象カラム,カテゴリ種別'
     add_item :category_relation_type, :radio
+    add_item :category_id_relation, :text_area, lower_text: 'カテゴリID,カテゴリ種別,変換先カテゴリID'
+    add_item :map_category_id_relation, :text_area, lower_text: 'カテゴリID,カテゴリ種別,変換先カテゴリID'
     add_item :status_relation, :text_area, lower_text: '値,変換先'
     add_item :attachement_column, :text
     add_item :attachement_directory, :text
@@ -65,6 +69,7 @@ class Docin::Content::SettingField < Cms::Content::SettingField
     add_item :quota_dictionary, :text_area, lower_text: '値,振り分け先コンテンツID'
     add_item :org_relation, :text_area, lower_text: '所属ID,振り替え後所属ID'
     add_item :org_inquiry_relation_type, :radio
+    add_item :skip_task_publish, :check_box
   end
 
 end

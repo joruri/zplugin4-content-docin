@@ -30,7 +30,7 @@ class Docin::ImportJob < Sys::ProcessJob
       register_total += 1
       script.progress! row do
         doc_ids.reject!{|doc_id| doc_id == row&.doc&.id }
-        if update_doc(row)
+        if update_doc(row, content)
           register_success += 1
         else
           register_failure += 1
@@ -62,6 +62,7 @@ class Docin::ImportJob < Sys::ProcessJob
       end
     end
     log.set_status({parse_state: "link"})
+    Docin::ExportCsvJob.perform_later(content)
     Docin::LinkJob.perform_now(content)
   end
 
@@ -71,7 +72,7 @@ class Docin::ImportJob < Sys::ProcessJob
     content.gp_article_content.docs
   end
 
-  def update_doc(row)
+  def update_doc(row, content)
     row.doc.categorizations.each do |c|
       c.destroy if c.marked_for_destruction?
     end
@@ -85,11 +86,12 @@ class Docin::ImportJob < Sys::ProcessJob
       file.destroy if file.marked_for_destruction?
     end
     if row.doc.save
-      if  (row.doc.state_public? || row.doc.state_closed?)
+      if  (row.doc.state_public? || row.doc.state_closed?) && content.auto_publisher?
         Docin::PublisherJob.perform_later(row.doc)
       end
       return true
     else
+      Rails.logger.error "save failed. #{row.doc.name}/#{row.doc.title}/#{row.doc.errors.inspect}"
       return false
     end
   end

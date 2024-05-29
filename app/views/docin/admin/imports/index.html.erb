@@ -26,3 +26,12 @@
   </tr>
 </table>
 <% end %>
+<h2 class="cms-action-title">取り込み結果CSV</h2>
+<table class="cms-detail">
+  <tr>
+    <th>出力</th>
+    <td>
+      <%= link_to :export, { action: :export }, method: :get if @policy.allowed(:new?) %>
+    </td>
+  </tr>
+</table>

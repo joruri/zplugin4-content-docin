@@ -13,9 +13,12 @@ ja:
         summary_template: 概要テンプレート
         import_path: CSVファイルパス
         import_user_id: デフォルト作成者ユーザー
+        default_category_id: デフォルトカテゴリID
         column_replace: カラム読み替え
         category_relation: カテゴリ種別読み替え
-        category_relation_type: カテゴリ照合
+        category_relation_type: カテゴリ種別照合
+        category_id_relation: カテゴリID置換設定
+        map_category_id_relation: 地図カテゴリID置換設定
         status_relation: ステータス読み替え
         attachement_column: 添付ファイル名カラム
         attachement_directory: 添付ファイルディレクトリ
@@ -58,6 +61,7 @@ ja:
         daily_import: 定期取り込み
         file_doc_id_regexp: 記事ID正規表現
         auto_closure: 取り込み後非公開処理
+        auto_publisher: 取り込み後書き出し処理
         quota_column: コンテンツ振り分けカラム
         quota_dictionary: 振り分け設定
         org_relation: グループ読み替え
@@ -66,6 +70,8 @@ ja:
         check_state_in_validation: ステータス
         check_state_in_validation_true: 下書きから公開終了への変更を許可しない
         check_state_in_validation_false: 下書きから公開終了への変更を許可する
+        skip_task_publish: 公開日
+        skip_task_publish_true: 公開開始日を超過している場合はタスクを登録しない
   active_hash:
     attributes:
       docin/content/setting_menu/title:

@@ -27,6 +27,16 @@ class Docin::Admin::ImportsController < Docin::Admin::BaseController
     return redirect_to url_for(action: :index), notice: "取り込みを開始しました。"
   end
 
+  def export
+    body = File.exist?(@content.export_csv_path) ? File.read(@content.export_csv_path) : ''
+    if body.blank?
+      Docin::ExportCsvJob.perform_later(@content)
+      return redirect_to url_for(action: :index), notice: "CSVファイルを作成中です。"
+    else
+      return send_data platform_encode(body), type: 'text/csv', filename: "import_result_#{Time.now.to_i}.csv"
+    end
+  end
+
   private
 
   def confirm

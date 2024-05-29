@@ -3,6 +3,7 @@ admin_scope 'docin/c:concept', module: 'docin/admin' do
     resources :imports do
       collection do
         get :start
+        get :export
       end
     end
     resources :content_settings,

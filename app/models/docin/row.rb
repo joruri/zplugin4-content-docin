@@ -81,7 +81,9 @@ class Docin::Row < ApplicationModel
 
   def task_publish_process_at
     return if data[content.setting.task_publish_process_at].blank?
-    Time.parse(data[content.setting.task_publish_process_at]) rescue nil
+    publish_process_at = Time.parse(data[content.setting.task_publish_process_at]) rescue nil
+    publish_process_at = nil if content.setting.skip_task_publish && publish_process_at.present? && publish_process_at < Time.now
+    publish_process_at
   end
 
   def task_close_process_at
@@ -256,8 +258,8 @@ class Docin::Row < ApplicationModel
   end
 
   def inquiry_state_option
-    return [] if data[content.setting.inquiry_state].blank?
-    Cms::Inquiry.state_options.assoc(data[content.setting.inquiry_state]).presence || []
+    state = data[content.setting.inquiry_state] || "表示"
+    Cms::Inquiry.state_options.assoc(state).presence || []
   end
 
   def event_state_option

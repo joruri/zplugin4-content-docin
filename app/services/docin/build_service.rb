@@ -66,6 +66,10 @@ class Docin::BuildService < ApplicationService
       build_categories(doc, row)
     end
 
+    if @content.default_category_ids.present?
+      build_default_categories(doc, row)
+    end
+
     # file
     if @content.attachement_directory_import? && @content.setting.attachement_directory.present?
       build_files_from_directory(doc, row)
@@ -87,9 +91,13 @@ class Docin::BuildService < ApplicationService
 
   def set_doc_content(content, dest_content, row)
     if content.setting.quota_column.present?
-      content_id = content.quota_content_dictionary[row.data[content.setting.quota_column]]
-      set_content = GpArticle::Content::Doc.find_by(id: content_id)
-      return set_content if set_content.present?
+      row.data.headers.each do |key|
+        next if key !~ /#{content.setting.quota_column}/
+        content_id = content.quota_content_dictionary[row.data[key]]
+        next if content_id.blank?
+        set_content = GpArticle::Content::Doc.find_by(id: content_id)
+        return set_content if set_content.present?
+      end
     end
     return dest_content
   end
@@ -98,15 +106,17 @@ class Docin::BuildService < ApplicationService
     if @content.setting.creator_group_code
       org_code = @content.org_dictionary[row.data[@content.setting.creator_group_code]] || row.data[@content.setting.creator_group_code]
       @group = @content.site.groups.find_by(code: org_code)
+      g_cuser = @group.users.find_by(auth_no: 2) if @group.present?
     elsif @content.setting.creator_group_name
       @group = @content.site.groups.find_by(name: row.data[@content.setting.creator_group_name])
+      g_cuser = @group.users.find_by(auth_no: 2) if @group.present?
     end
     if @content.setting.creator_user_code
       cuser = @content.site.users.find_by(account: row.data[@content.setting.creator_user_code])
     elsif @content.setting.creator_user_name
       cuser = @content.site.users.find_by(name: row.data[@content.setting.creator_user_name])
     end
-    @user = cuser || @user
+    @user = cuser || g_cuser || @user
   end
 
   def replace_data(row)
@@ -248,12 +258,19 @@ class Docin::BuildService < ApplicationService
   end
 
   def build_categories_from_regexp(doc, row)
+    category_type_id = doc&.content&.category_types&.pluck(:id)
+    category_id_relation = @content.category_id_dictionary
     category_column_regexp = @content.setting.category_column_regexp
     category_ids = row.data.headers.each_with_object([]) do |key, category_ids|
       next if key !~ /#{category_column_regexp}/
-      category_ids << row.data[key]
+      if category_id_relation.present? && rel = category_id_relation[row.data[key]]
+        category_type_id = doc&.content&.category_types&.where(name: rel[0])&.pluck(:id) if rel[0].present?
+        category_ids.concat(rel[1]) if rel[1].present?
+      else
+        category_ids << row.data[key]
+      end
     end
-    categories = GpCategory::Category.where(category_type_id: doc&.content&.category_types&.pluck(:id), name: category_ids)
+    categories = GpCategory::Category.where(category_type_id: category_type_id, name: category_ids)
     row.category_titles = categories.pluck(:title)
 
     doc.categorizations.each do |c|
@@ -292,6 +309,16 @@ class Docin::BuildService < ApplicationService
     end
   end
 
+  def build_default_categories(doc, row)
+    category_type_id = doc&.content&.category_types&.pluck(:id)
+    categories = GpCategory::Category.where(category_type_id: category_type_id, name: @content.default_category_ids)
+    categories.each do |category|
+      if !doc.categorizations.detect { |c| c.category == category && c.categorized_as == 'GpArticle::Doc' }
+        doc.categorizations.build(category: category, categorized_as: 'GpArticle::Doc')
+      end
+    end
+  end
+
   def build_map(doc, row)
     doc.marker_state = row.marker_state
     doc.marker_sort_no = row.marker_sort_no
@@ -311,7 +338,30 @@ class Docin::BuildService < ApplicationService
       end
     end
 
+    category_column_regexp = @content.setting.category_column_regexp
+    if category_column_regexp.present?
+      category_type_id = doc&.content&.marker_category_types&.pluck(:id)
+      category_id_relation = @content.map_category_id_dictionary
+      category_ids = row.data.headers.each_with_object([]) do |key, category_ids|
+        next if key !~ /#{category_column_regexp}/
+        if category_id_relation.present? && rel = category_id_relation[row.data[key]]
+          category_type_id = doc&.content&.marker_category_types&.where(name: rel[0])&.pluck(:id) if rel[0].present?
+          category_ids.concat(rel[1]) if rel[1].present?
+        else
+          category_ids << row.data[key]
+        end
+      end
+      categories = GpCategory::Category.where(category_type_id: category_type_id, name: category_ids)
+      categories.each do |category|
+        if !doc.marker_categorizations.detect { |c| c.category == category && c.categorized_as == 'Map::Marker' }
+          doc.marker_categorizations.build(category: category, categorized_as: 'Map::Marker')
+        end
+      end
+    end
+
+
     if row.map_exist?
+      doc.marker_state = "visible"
       doc.maps.build if doc.maps.blank?
 
       map = doc.maps[0]
