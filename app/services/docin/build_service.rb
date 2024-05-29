@@ -453,7 +453,9 @@ class Docin::BuildService < ApplicationService
         filename = File.basename(f)
         next if filename.blank?
         ext = File.extname(filename)
-        en_filename = filename =~ /^[0-9a-zA-Z\-\s\._]*$/ ? filename : "#{Time.now.strftime("%Y%m%d%H%M%S%L")}#{ext}"
+        no_ext_filename = File.basename(f, ext)
+        en_filename = filename =~ /^[0-9a-zA-Z\-\s\._]*$/ && no_ext_filename !~ /\./ ? filename : "#{Time.now.strftime("%Y%m%d%H%M%S%L")}#{ext}"
+        Rails.logger.error "en_filename#{en_filename}"
         file = doc.files.where(file_attachable: doc, title: filename).first || doc.files.build(file_attachable: doc, title: filename)
         file.file = ActionDispatch::TempFile.create_from_path(f)
         file.site = @content.site
