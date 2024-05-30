@@ -71,14 +71,10 @@ class Docin::BuildService < ApplicationService
     end
 
     # file
-    if @content.attachement_directory_import? && @content.setting.attachement_directory.present?
-      build_files_from_directory(doc, row)
+    if @content.setting.attachement_directory.blank? || @content.setting.attachement_column.blank?
+      build_file(doc, row)
     else
-      if @content.setting.attachement_directory.blank? || @content.setting.attachement_column.blank?
-        build_file(doc, row)
-      else
-        build_file_in_import(doc, row)
-      end
+      build_file_in_import(doc, row)
     end
 
     doc.in_ignore_accessibility_check = '1'
