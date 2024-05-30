@@ -5,9 +5,7 @@ class Docin::LinkJob < Sys::ProcessJob
 
   def perform(content, options = {})
     log = content.log || content.create_log
-    last_updated_at = log.last_updated_at
     items = Zplugin::Content::Docin::Doc.in_site(content.site)
-    items = items.where(Zplugin::Content::Docin::Doc.arel_table[:updated_at].gteq(last_updated_at)) if last_updated_at.present?
     items = items.order(:id)
     items.find_in_batches(batch_size: 10) do |cdocs|
       cdocs.each do |cdoc|
