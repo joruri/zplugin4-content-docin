@@ -92,14 +92,19 @@ class Docin::ImportJob < Sys::ProcessJob
     row.doc.files.each do |file|
       file.destroy if file.marked_for_destruction?
     end
-    if row.doc.save
-      if  (row.doc.state_public? || row.doc.state_closed?) && content.auto_publisher?
-        Docin::PublisherJob.perform_later(row.doc)
+    begin
+      if row.doc.save
+        if  (row.doc.state_public? || row.doc.state_closed?) && content.auto_publisher?
+          Docin::PublisherJob.perform_later(row.doc)
+        end
+        return true
+      else
+        Rails.logger.error "save failed. #{row.doc.name}/#{row.doc.title}/#{row.doc.errors.inspect}"
+        return false
       end
-      return true
-    else
-      Rails.logger.error "save failed. #{row.doc.name}/#{row.doc.title}/#{row.doc.errors.inspect}"
-      return false
+    rescue => e
+      Rails.logger.error e.inspect
+      Rails.logger.error "save error.#{row.doc.name}/#{row.doc.title}"
     end
   end
 
@@ -115,7 +120,7 @@ class Docin::ImportJob < Sys::ProcessJob
         en_filename = filename =~ /^[0-9a-zA-Z\-\s\._]*$/ && no_ext_filename !~ /\./ ? filename : "#{Time.now.strftime("%Y%m%d%H%M%S%L")}#{ext}"
         file = row.doc.files.where(file_attachable: row.doc, title: filename).first || row.doc.files.build(file_attachable: row.doc, title: filename)
         file.file = ActionDispatch::TempFile.create_from_path(f)
-        file.site = row.doc.content.site
+        file.site = content.site
         file.name = en_filename || file.name
         file.title = filename
         file.tmp_id = row.doc.in_tmp_id
