@@ -105,6 +105,7 @@ class Docin::ImportJob < Sys::ProcessJob
     rescue => e
       Rails.logger.error e.inspect
       Rails.logger.error "save error.#{row.doc.name}/#{row.doc.title}"
+      return false
     end
   end
 
