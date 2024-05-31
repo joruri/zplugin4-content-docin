@@ -114,6 +114,7 @@ private
     uri.path = '/' unless uri.path
     uri
   rescue => e
+    warn_log url
     warn_log e
     nil
   end
@@ -139,6 +140,7 @@ private
       clink.after_url += '#' + uri.fragment if uri.fragment
     end
   rescue => e
+    warn_log uri
     warn_log e
   end
 
