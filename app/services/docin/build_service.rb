@@ -20,9 +20,9 @@ class Docin::BuildService < ApplicationService
   def build(row, doc: nil)
     doc_content = set_doc_content(@content, @dest_content, row)
     if @content.setting.quota_column.present? && @dest_content.id != doc_content.id
-      doc = doc_content.docs.where(name: row.name).where.not(state: 'trashed').first_or_initialize
+      doc = doc_content.docs.where(name: row.name).first_or_initialize
     else
-      doc ||= doc_content.docs.where(name: row.name).where.not(state: 'trashed').first_or_initialize
+      doc ||= doc_content.docs.where(name: row.name).first_or_initialize
     end
     doc.state = row.state
     doc.title = row.title
