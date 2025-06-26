@@ -12,6 +12,7 @@ class Docin::BuildService < ApplicationService
 
     @body_template = Erubis::Eruby.new(@content.body_template)
     @summary_template = Erubis::Eruby.new(@content.summary_template)
+    @dictionary = @content.column_replace_dictionary
   end
 
   def build(row, doc: nil)
@@ -19,8 +20,8 @@ class Docin::BuildService < ApplicationService
 
     doc.state = row.state
     doc.title = row.title
-    doc.body = @body_template.evaluate(data: row.data)
-    doc.summary = @summary_template.evaluate(data: row.data)
+    doc.body = @body_template.evaluate(data: replace_data(row))
+    doc.summary = @summary_template.evaluate(data: replace_data(row))
     doc.concept = @dest_content.concept
     doc.display_updated_at = row.display_updated_at unless row.display_updated_at.nil?
     doc.display_published_at = row.display_published_at unless row.display_published_at.nil?
@@ -47,10 +48,18 @@ class Docin::BuildService < ApplicationService
     build_map(doc, row)
 
     # category
-    build_categories(doc, row)
+    if @content.setting.category_relation.blank?
+      build_categories(doc, row)
+    else
+      build_categories_in_import(doc, row)
+    end
 
     # file
-    build_file(doc, row)
+    if @content.setting.attachement_directory.blank? || @content.setting.attachement_column.blank?
+      build_file(doc, row)
+    else
+      build_file_in_import(doc, row)
+    end
 
     doc.in_ignore_accessibility_check = '1'
     doc.in_ignore_link_check = '1'
@@ -59,6 +68,17 @@ class Docin::BuildService < ApplicationService
   end
 
   private
+
+  def replace_data(row)
+    return row.data if @dictionary.blank?
+    data = row.data.dup
+    data.each_entry do |key|
+      next if key.blank?
+      next if @dictionary[key[0]].blank?
+      data[key[0]] = @dictionary[key[0]][key[1]] if @dictionary[key[0]][key[1]].present?
+     end
+    data
+  end
 
   def tasks_attributes(doc, row)
     {
@@ -150,6 +170,32 @@ class Docin::BuildService < ApplicationService
   def build_categories(doc, row)
     categories = @category_types.keys.each_with_object([]) do |title, categories|
                    category_titles = row.category_titles_from_category_type_title(title)
+                   next if category_titles.blank?
+                   if @content.category_relation_type == 0
+                    cs = @category_types[title].select { |category| category.name.in?(category_titles) }
+                   else
+                    cs = @category_types[title].select { |category| category.title.in?(category_titles) }
+                   end
+                   categories.concat(cs) if cs.present?
+                 end
+    row.category_titles = categories.pluck(:title)
+
+    doc.categorizations.each do |c|
+      if c.categorized_as == 'GpArticle::Doc' && !categories.include?(c.category)
+        c.mark_for_destruction
+      end
+    end
+
+    categories.each do |category|
+      if !doc.categorizations.detect { |c| c.category == category && c.categorized_as == 'GpArticle::Doc' }
+        doc.categorizations.build(category: category, categorized_as: 'GpArticle::Doc')
+      end
+    end
+  end
+
+  def build_categories_in_import(doc, row)
+    categories = @category_types.keys.each_with_object([]) do |title, categories|
+                   category_titles = row.category_titles_from_category_type_dictionary(title)
                    next if category_titles.blank?
                    cs = @category_types[title].select { |category| category.title.in?(category_titles) }
                    categories.concat(cs) if cs.present?
@@ -245,4 +291,31 @@ class Docin::BuildService < ApplicationService
       doc.files.each { |file| file.mark_for_destruction }
     end
   end
+
+  def build_file_in_import(doc, row)
+    if row.data[@content.setting.attachement_column].present?
+      path = "#{@content.setting.attachement_directory}#{row.data[@content.setting.attachement_column]}"
+      return unless File.exist?(path)
+      doc.files.build if doc.files.blank?
+      file = doc.files[0]
+      file.file = ActionDispatch::TempFile.create_from_path(path)
+      file.site_id = @content.site_id
+      file.name = File.basename(row.data[@content.setting.attachement_column])
+      file.title = row.title
+      file.alt_text = row.title
+      file.image_resize = row.file_image_resize.presence || @dest_content.setting.attachment_resize_size
+      if file.creator.blank?
+        file.build_creator
+        file.creator.user = doc.creator.user
+        file.creator.group = doc.creator.group
+      else
+        file.build_editor if file.editor.blank?
+        file.editor.user = doc.editor.user
+        file.editor.group = doc.editor.group
+      end
+    else
+      doc.files.each { |file| file.mark_for_destruction }
+    end
+  end
+
 end

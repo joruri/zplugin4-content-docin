@@ -5,4 +5,10 @@ class Docin::Content::SettingMenu < Cms::Content::SettingMenu
     add_item :gp_article_relation
     add_item :gp_template_relation
   end
+  add_item :columns do
+  end
+
+  add_item :import do
+  end
+
 end
