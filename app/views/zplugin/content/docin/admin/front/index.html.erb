@@ -1,21 +1,21 @@
 <%= page_entries_info @items %>
 
-<table class="cms-list" data-controller="basic-list">
+<table class="core-list" data-controller="basic-list">
   <thead>
     <tr>
-      <th class="cms-list__id"><%= Cms::Content.human_attribute_name :serial_no %></th>
-      <th class="cms-list__content-id"><%= Cms::Content.human_attribute_name :code %></th>
-      <th class="cms-list__content"><%= Cms::Content.human_attribute_name :name %></th>
-      <th class="cms-list__sort"><%= Cms::Content.human_attribute_name :sort_no %></th>
+      <th class="core-list__id"><%= Cms::Content.human_attribute_name :serial_no %></th>
+      <th class="core-list__content-id"><%= Cms::Content.human_attribute_name :code %></th>
+      <th class="core-list__content"><%= Cms::Content.human_attribute_name :name %></th>
+      <th class="core-list__sort"><%= Cms::Content.human_attribute_name :sort_no %></th>
     </tr>
   </thead>
   <tbody>
     <%- @items.each do |item| -%>
       <tr data-href="<%= item.admin_content_uri %>" >
-        <td class="cms-list__id"><%= item.serial_no %></td>
-        <td class="cms-list__content-id"><%= item.code %></td>
-        <td class="cms-list__content"><%= item.name %></td>
-        <td class="cms-list__sort"><%= item.sort_no %></td>
+        <td class="core-list__id"><%= item.serial_no %></td>
+        <td class="core-list__content-id"><%= item.code %></td>
+        <td class="core-list__content"><%= item.name %></td>
+        <td class="core-list__sort"><%= item.sort_no %></td>
       </tr>
     <%- end -%>
   </tbody>
