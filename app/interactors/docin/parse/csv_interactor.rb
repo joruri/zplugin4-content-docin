@@ -1,6 +1,6 @@
 class Docin::Parse::CsvInteractor < ApplicationInteractor
-  context_in :content, :user, :csv, required: true
-  context_out :results
+  context :content, :user, :csv, required: true
+  context :results, output: true
 
   def call
     builder = Docin::BuildService.new(@content, @user)

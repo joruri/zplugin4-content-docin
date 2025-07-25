@@ -32,7 +32,7 @@ RSpec.describe Docin::Admin::Content::SettingsController, type: :request do
       describe '#update' do
         it 'gets response' do
           patch docin_content_setting_path(id: menu.id), params: { item: content.setting.data }
-          expect(response.status).to eq(302)
+          expect(response.status).to eq(303)
         end
       end
     end
