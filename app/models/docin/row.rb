@@ -26,8 +26,8 @@ class Docin::Row < ApplicationModel
   end
 
   def category_titles_from_category_type_title(category_type_title)
-    return [] if data[content.setting.category_type_title].blank?
-    data[content.setting.category_type_title].split(/,|、/).map(&:strip).reject(&:blank?)
+    return [] if data[category_type_title].blank?
+    data[category_type_title].split(/,|、/).map(&:strip).reject(&:blank?)
   end
 
   def category_titles_from_category_type_dictionary(title)
