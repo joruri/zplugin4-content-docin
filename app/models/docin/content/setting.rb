@@ -5,6 +5,7 @@ class Docin::Content::Setting < Cms::ContentSetting
   attr_json :body_template, :string
   attr_json :summary_template, :string
   attr_json :default_state, :string, enum: [:draft, :public], default: :draft
+  attr_json :enable_marker, :integer, enum: [0, 1], default: 1
   attr_json :template_values, ActiveModel::Type::Value.new, default: {}
   attr_json :import_path, :string
   attr_json :import_user_id, :integer
@@ -31,16 +32,18 @@ class Docin::Content::Setting < Cms::ContentSetting
   attr_json :marker_state, :string, default: "地図表示"
   attr_json :marker_sort_no, :string, default: "地図表示順"
   attr_json :marker_category, :string, default: "マップカテゴリ"
+  attr_json :marker_category_names, :string, default: "カラム名1,カラム名2"
   attr_json :map_title, :string, default: "マップ名"
   attr_json :map_coordinate, :string, default: "座標"
   attr_json :map_zoom, :string, default: "縮尺"
   attr_json :map_marker, :string, default: "マーカー"
+  attr_json :map_lat, :string, default: "緯度"
+  attr_json :map_lng, :string, default: "経度"
   attr_json :file_path, :string, default: "添付ファイル"
   attr_json :file_name, :string, default: "添付ファイル名"
   attr_json :file_title, :string, default: "表示ファイル名"
   attr_json :file_alt_text, :string, default: "代替テキスト"
   attr_json :file_image_resize, :string, default: "画像リサイズ"
-
 
   attr_json_belongs_to :gp_article_content, class_name: 'GpArticle::Content::Doc'
   attr_json_belongs_to :import_user, class_name: 'Sys::User'

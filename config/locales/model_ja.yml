@@ -36,16 +36,20 @@ ja:
         marker_state: 地図表示
         marker_sort_no: 地図表示順
         marker_category: マップカテゴリ
+        marker_category_names: マップカテゴリ（複数）
         map_title: マップ名
         map_coordinate: 座標
         map_zoom: 縮尺
         map_marker: マーカー
+        map_lat: 緯度
+        map_lng: 経度
         file_path: 添付ファイル
         file_name: 添付ファイル名
         file_title: 表示ファイル名
         file_alt_text: 代替テキスト
         file_image_resize: 画像リサイズ
         default_state: デフォルトの記事ステータス
+        enable_marker: 強制的に地図に表示
   active_hash:
     attributes:
       docin/content/setting_menu/title:

@@ -5,6 +5,7 @@ class Docin::Content::SettingField < Cms::Content::SettingField
     add_item :body_template, :text_area
     add_item :summary_template, :text_area
     add_item :default_state, :radio
+    add_item :enable_marker, :radio
   end
 
   menu :columns do
@@ -25,10 +26,13 @@ class Docin::Content::SettingField < Cms::Content::SettingField
     add_item :marker_state, :text
     add_item :marker_sort_no, :text
     add_item :marker_category, :text
+    add_item :marker_category_names, :text
     add_item :map_title, :text
     add_item :map_coordinate, :text
     add_item :map_zoom, :text
     add_item :map_marker, :text
+    add_item :map_lat, :text
+    add_item :map_lng, :text
     add_item :file_path, :text
     add_item :file_name, :text
     add_item :file_title, :text
