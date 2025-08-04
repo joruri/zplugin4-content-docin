@@ -4,6 +4,10 @@ class Docin::Content::Import < Cms::Content
   has_one :setting, foreign_key: :content_id, class_name: 'Docin::Content::Setting', dependent: :destroy
   delegate_attr_json_for :setting
 
+  def enable_marker?
+    setting.enable_marker == 1
+  end
+
   def gp_article_content
     setting.gp_article_content
   end

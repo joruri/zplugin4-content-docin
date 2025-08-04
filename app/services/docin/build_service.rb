@@ -242,7 +242,7 @@ class Docin::BuildService < ApplicationService
       map.title = row.map_title
       map.map_lat = row.map_lat
       map.map_lng = row.map_lng
-      map.map_zoom = row.map_zoom
+      map.map_zoom = row.map_zoom || 14
 
       new_map_markers = row.map_markers
       new_map_markers.each_with_index do |(name, lat, lng), idx|
