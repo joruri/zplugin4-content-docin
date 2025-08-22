@@ -1,7 +1,17 @@
 <%- if @item.gp_article_content &&
        @item.gp_article_content.template_available? &&
-       @item.gp_article_content.default_template -%>
-  <%= render 'gp_template/admin/shared/show', item: @item, template: @item.template, template_values: @item.template_values %>
+       @item.gp_article_content.default_template
+       template = @item.gp_article_content.default_template
+       template_values = @item.template_values -%>
+  <%- template.public_items.each do |titem|
+    next if titem.item_type == 'attachment_file_list' -%>
+    <table class="cms-detail">
+      <tr>
+        <th><%= titem.title %></th>
+        <td><%=hbr template_values[titem.name] %></td>
+      </tr>
+    </table>
+  <%- end -%>
 <%- else -%>
   <table class="cms-detail">
     <tr>

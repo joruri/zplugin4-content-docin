@@ -1,9 +1,51 @@
 <%- if @item.gp_article_content &&
        @item.gp_article_content.template_available? &&
-       @item.gp_article_content.default_template -%>
-  <%= render 'gp_template/admin/shared/form',
-              template: @item.gp_article_content.default_template,
-              template_values: @item.template_values %>
+       @item.gp_article_content.default_template
+       template = @item.gp_article_content.default_template
+       template_values = @item.template_values -%>
+  <%- template.public_items.each do |item|
+    next if item.item_type == 'attachment_file_list'
+  -%>
+    <table class="cms-form">
+      <tr>
+        <th>
+          <%= content_tag_if item.errors.present?, :div, class: 'field_with_errors' do %>
+            <%= label_tag "item_template_values_#{item.name}", item.title %>
+          <%- end -%>
+          <% if item.required? %><span class="util-note">※</span><% end %>
+        </th>
+        <td>
+          <%- if item.description.present? -%>
+            <div class="body"><%=raw item.description %></div>
+          <%- end -%>
+          <div data-controller="input-count">
+          <%= content_tag_if item.errors.present?, :div, class: 'field_with_errors' do %>
+            <div class="cms-template-item">
+            <%- case item.item_type -%>
+            <%- when 'text_field', 'select', 'radio_button' -%>
+              <%= text_field_tag "item[template_values][#{item.name}]", template_values[item.name],
+                                                                        style: item.style_attribute,
+                                                                        data: { action: 'input->input-count#run' } %>
+            <%- when 'text_area', 'rich_text' -%>
+              <%= text_area_tag "item[template_values][#{item.name}]", template_values[item.name],
+                                                                        style: item.style_attribute, class: 'cms-form__size-m',
+                                                                        data: { action: 'input->input-count#run' } %>
+            <%- when 'attachment_file' -%>
+              <%= text_field_tag "item[template_values][#{item.name}]", template_values[item.name], style: item.style_attribute %>
+            <%- end -%>
+            </div>
+          <%- end -%>
+            <span class="counter" style="<%= 'display: none;' unless item.form_text_max_length %>"></span>
+          </div>
+          <%- if item.lower_description.present? -%>
+            <div class="body"><%=raw item.lower_description %></div>
+          <%- end -%>
+        </td>
+      </tr>
+    </table>
+  <%- end -%>
+
+
 <%- else -%>
   <table class="cms-detail">
     <tr>

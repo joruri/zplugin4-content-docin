@@ -48,8 +48,6 @@ class Docin::Content::Setting < Cms::ContentSetting
   attr_json_belongs_to :gp_article_content, class_name: 'GpArticle::Content::Doc'
   attr_json_belongs_to :import_user, class_name: 'Sys::User'
 
-  validates_with GpTemplate::TemplateValuesValidator
-
   def gp_article_content_id_text
     gp_article_content&.name
   end
