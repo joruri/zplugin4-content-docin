@@ -26,8 +26,8 @@ class Docin::Row < ApplicationModel
   end
 
   def category_titles_from_category_type_title(category_type_title)
-    return [] if data[content.setting.category_type_title].blank?
-    data[content.setting.category_type_title].split(/,|、/).map(&:strip).reject(&:blank?)
+    return [] if data[category_type_title].blank?
+    data[category_type_title].split(/,|、/).map(&:strip).reject(&:blank?)
   end
 
   def category_titles_from_category_type_dictionary(title)
@@ -132,11 +132,11 @@ class Docin::Row < ApplicationModel
   end
 
   def marker_state
-    marker_state_option.last
+    content.enable_marker? ? "visible" : marker_state_option.last
   end
 
   def marker_state_text
-    marker_state_option.first
+    content.enable_marker? ? "表示" : marker_state_option.first
   end
 
   def marker_sort_no
@@ -144,8 +144,13 @@ class Docin::Row < ApplicationModel
   end
 
   def marker_category_titles
-    return [] if data[content.setting.marker_category].blank?
-    data[content.setting.marker_category].split(/,|、/).map(&:strip).reject(&:blank?)
+    if data[content.setting.marker_category].present?
+      data[content.setting.marker_category].split(/,|、/).map(&:strip).reject(&:blank?)
+    elsif content.setting.marker_category_names.present?
+      content.setting.marker_category_names.split(/,|、/).map{|n| data[n] }.reject(&:blank?)
+    else
+      []
+    end
   end
 
   def marker_category_titles_text
@@ -173,16 +178,21 @@ class Docin::Row < ApplicationModel
   end
 
   def map_markers
-    return [] if data[content.setting.map_marker].blank?
-    data[content.setting.map_marker].split(/\r\n|\r|\n/).map(&:strip).select(&:present?).map do |marker|
-      name, coordinate = marker.split(/\(|（/)
-      name.strip!
-      lat = lng = nil
-      unless coordinate.blank?
-        coordinate.gsub!(/\)|）/, '')
-        lat, lng = coordinate.split(/,|、/).map { |l| l.strip!; l.blank? ? nil : l }
+    if data[content.setting.map_marker].present?
+      data[content.setting.map_marker].split(/\r\n|\r|\n/).map(&:strip).select(&:present?).map do |marker|
+        name, coordinate = marker.split(/\(|（/)
+        name.strip!
+        lat = lng = nil
+        unless coordinate.blank?
+          coordinate.gsub!(/\)|）/, '')
+          lat, lng = coordinate.split(/,|、/).map { |l| l.strip!; l.blank? ? nil : l }
+        end
+        [name, lat, lng]
       end
-      [name, lat, lng]
+    elsif map_lat.present? && map_lng.present?
+      [ [data[content.setting.title], map_lat, map_lng] ]
+    else
+      []
     end
   end
 
@@ -226,8 +236,11 @@ class Docin::Row < ApplicationModel
   private
 
   def map_coordinates
-    return [] if map_coordinate.blank?
-    " #{map_coordinate} ".split(/,|、/).map(&:strip)
+    if map_coordinate.present?
+      " #{map_coordinate} ".split(/,|、/).map(&:strip)
+    else
+      [ data[content.setting.map_lat], data[content.setting.map_lng]]
+    end
   end
 
   def state_option

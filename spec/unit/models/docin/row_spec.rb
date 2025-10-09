@@ -1,9 +1,11 @@
 RSpec.describe Docin::Row, type: :model do
+  let!(:content) { create(:docin_import_content, :with_related_contents) }
+
   describe '#event_periods' do
     context 'single' do
       it 'gets periods' do
         data = { 'イベント期間' => '2023-01-23～2023-01-27' }
-        row = described_class.new(data: data)
+        row = described_class.new(content: content, data: data)
         expect(row.event_periods).to match([[Date.parse('2023-01-23'), Date.parse('2023-01-27')]])
       end
     end
@@ -11,7 +13,7 @@ RSpec.describe Docin::Row, type: :model do
     context 'multiple' do
       it 'gets periods' do
         data = { 'イベント期間' => "2023-01-23～2023-01-27\n2023-01-30～2023-01-31" }
-        row = described_class.new(data: data)
+        row = described_class.new(content: content, data: data)
         expect(row.event_periods).to match(
           [[Date.parse('2023-01-23'), Date.parse('2023-01-27')],
            [Date.parse('2023-01-30'), Date.parse('2023-01-31')]]
@@ -22,7 +24,7 @@ RSpec.describe Docin::Row, type: :model do
     context 'only started date' do
       it 'gets periods' do
         data = { 'イベント期間' => "2023-01-23" }
-        row = described_class.new(data: data)
+        row = described_class.new(content: content, data: data)
         expect(row.event_periods).to match([[Date.parse('2023-01-23'), Date.parse('2023-01-23')]])
       end
     end
@@ -30,7 +32,7 @@ RSpec.describe Docin::Row, type: :model do
     context 'only ended date' do
       it 'gets periods' do
         data = { 'イベント期間' => "～2023-01-27" }
-        row = described_class.new(data: data)
+        row = described_class.new(content: content, data: data)
         expect(row.event_periods).to match([[Date.parse('2023-01-27'), Date.parse('2023-01-27')]])
       end
     end
@@ -38,7 +40,7 @@ RSpec.describe Docin::Row, type: :model do
     context 'invalid date' do
       it 'gets periods' do
         data = { 'イベント期間' => "2023-01～2023-01-27\nABCDE" }
-        row = described_class.new(data: data)
+        row = described_class.new(content: content, data: data)
         expect(row.event_periods).to match([[Date.parse('2023-01-27'), Date.parse('2023-01-27')]])
       end
     end
@@ -48,7 +50,7 @@ RSpec.describe Docin::Row, type: :model do
     context 'single' do
       it 'gets markers' do
         data = { 'マーカー' => 'マーカー１(35.3, 139.4)' }
-        row = described_class.new(data: data)
+        row = described_class.new(content: content, data: data)
         expect(row.map_markers).to match([['マーカー１', '35.3', '139.4']])
       end
     end
@@ -56,7 +58,7 @@ RSpec.describe Docin::Row, type: :model do
     context 'multiple' do
       it 'gets markers' do
         data = { 'マーカー' => "マーカー１(35.3, 139.4)\nマーカー２(33, 133)" }
-        row = described_class.new(data: data)
+        row = described_class.new(content: content, data: data)
         expect(row.map_markers).to match([['マーカー１', '35.3', '139.4'], ['マーカー２', '33', '133']])
       end
     end
@@ -64,7 +66,7 @@ RSpec.describe Docin::Row, type: :model do
     context 'only name' do
       it 'gets markers' do
         data = { 'マーカー' => 'マーカー１' }
-        row = described_class.new(data: data)
+        row = described_class.new(content: content, data: data)
         expect(row.map_markers).to match([['マーカー１', nil, nil]])
       end
     end
@@ -72,7 +74,7 @@ RSpec.describe Docin::Row, type: :model do
     context 'only latitude' do
       it 'gets markers' do
         data = { 'マーカー' => 'マーカー１(35.3)' }
-        row = described_class.new(data: data)
+        row = described_class.new(content: content, data: data)
         expect(row.map_markers).to match([['マーカー１', '35.3', nil]])
       end
     end
@@ -80,7 +82,7 @@ RSpec.describe Docin::Row, type: :model do
     context 'only longitude' do
       it 'gets markers' do
         data = { 'マーカー' => 'マーカー１(,139.4)' }
-        row = described_class.new(data: data)
+        row = described_class.new(content: content, data: data)
         expect(row.map_markers).to match([['マーカー１', nil, '139.4']])
       end
     end
@@ -88,7 +90,7 @@ RSpec.describe Docin::Row, type: :model do
     context 'only coordinate' do
       it 'gets markers' do
         data = { 'マーカー' => '(35.3, 139.4)' }
-        row = described_class.new(data: data)
+        row = described_class.new(content: content, data: data)
         expect(row.map_markers).to match([['', '35.3', '139.4']])
       end
     end

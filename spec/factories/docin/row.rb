@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :doc_import_file, class: 'Docin::Row' do
     file_path = Zplugin::Content::Docin::Engine.root.join('spec/fixtures/files/test.csv').to_s
-    file { fixture_file_upload(file_path, 'text/csv') }
+    file { Rack::Test::UploadedFile.new(file_path, 'text/csv') }
   end 
 
   factory :doc_import_row, class: 'Docin::Row' do
