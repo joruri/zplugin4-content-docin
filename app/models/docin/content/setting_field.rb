@@ -6,6 +6,7 @@ class Docin::Content::SettingField < Cms::Content::SettingField
     add_item :summary_template, :text_area
     add_item :default_state, :radio
     add_item :enable_marker, :radio
+    add_item :data_text_id, :select
   end
 
   menu :columns do
