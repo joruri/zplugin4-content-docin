@@ -12,6 +12,10 @@ class Docin::Content::Import < Cms::Content
     setting.gp_article_content
   end
 
+  def data_text
+    setting.data_text
+  end
+
   def body_template
     setting.body_template.to_s
   end

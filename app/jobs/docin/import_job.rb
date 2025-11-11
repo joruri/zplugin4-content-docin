@@ -30,6 +30,11 @@ class Docin::ImportJob < Sys::ProcessJob
       docs = GpArticle::Doc.where(id: partial_doc_ids)
       Cms::PublishersJob.perform_later(content.site, publications: docs.flat_map(&:publications))
     end
+
+    if data_text = content.data_text
+      data_text.body = content.gp_article_content.public_docs.count
+      data_text.save
+    end
   end
 
   private

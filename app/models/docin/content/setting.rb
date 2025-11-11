@@ -6,6 +6,8 @@ class Docin::Content::Setting < Cms::ContentSetting
   attr_json :summary_template, :string
   attr_json :default_state, :string, enum: [:draft, :public], default: :draft
   attr_json :enable_marker, :integer, enum: [0, 1], default: 1
+  attr_json :data_text_id, :integer
+
   attr_json :template_values, ActiveModel::Type::Value.new, default: {}
   attr_json :import_path, :string
   attr_json :import_user_id, :integer
@@ -46,12 +48,17 @@ class Docin::Content::Setting < Cms::ContentSetting
   attr_json :file_image_resize, :string, default: "画像リサイズ"
 
   attr_json_belongs_to :gp_article_content, class_name: 'GpArticle::Content::Doc'
+  attr_json_belongs_to :data_text, class_name: 'Cms::DataText'
   attr_json_belongs_to :import_user, class_name: 'Sys::User'
 
   validates_with GpTemplate::TemplateValuesValidator
 
   def gp_article_content_id_text
     gp_article_content&.name
+  end
+
+  def data_text_id_text
+    data_text&.title
   end
 
   def import_user_id_text
@@ -71,6 +78,10 @@ class Docin::Content::Setting < Cms::ContentSetting
   class << self
     def gp_article_content_id_options(options = {})
       GpArticle::Content::Doc.in_site(options[:site]).map { |c| [c.name, c.id] }
+    end
+
+    def data_text_id_options(options = {})
+      Cms::DataText.in_site(options[:site]).map { |c| [c.title, c.id] }
     end
 
     def import_user_id_options(options = {})
