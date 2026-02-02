@@ -14,6 +14,8 @@ class Docin::Content::Setting < Cms::ContentSetting
   attr_json :column_replace, :text
   attr_json :category_relation, :text
   attr_json :category_relation_type, :integer, enum: [0, 1], default: 1
+  attr_json :skip_category, :text
+  attr_json :close_category, :text
   attr_json :attachement_column, :string
   attr_json :attachement_directory, :string
 

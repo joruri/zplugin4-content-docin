@@ -28,6 +28,36 @@ class Docin::Content::Import < Cms::Content
     Sys::User.find_by(id: setting.import_user_id)
   end
 
+  def skip_category
+    mapping = {}
+    return {} if setting.skip_category.blank?
+    setting.skip_category.split(/\r\n|\n/).each do |line|
+      if line =~ /,/
+        data = line.split(/,/)
+        mapping[data[0].strip] = [] if mapping[data[0].strip].blank?
+        mapping[data[0].strip] << data[1].strip
+      else
+        next
+      end
+    end
+    mapping
+  end
+
+  def close_category
+    mapping = {}
+    return {} if setting.close_category.blank?
+    setting.close_category.split(/\r\n|\n/).each do |line|
+      if line =~ /,/
+        data = line.split(/,/)
+        mapping[data[0].strip] = [] if mapping[data[0].strip].blank?
+        mapping[data[0].strip] << data[1].strip
+      else
+        next
+      end
+    end
+    mapping
+  end
+
   def column_replace_dictionary
     mapping = {}
     return mapping if setting.column_replace.blank?

@@ -20,6 +20,7 @@ class Docin::ImportJob < Sys::ProcessJob
     script.total! rows.size
     rows.each do |row|
       script.progress! row do
+        next if skip_category(row, content)
         doc_ids.reject!{|doc_id| doc_id == row&.doc&.id }
         update_doc(row)
       end
@@ -41,6 +42,17 @@ class Docin::ImportJob < Sys::ProcessJob
 
   def load_docs(content)
     content.gp_article_content.docs
+  end
+
+  def skip_category(row, content)
+    return false if content.skip_category.blank?
+    data = row.data.dup
+    data.each_entry do |key|
+      next if key.blank?
+      next if content.skip_category[key[0]].blank?
+      return true if content.skip_category[key[0]].include?(data[key[0]])
+    end
+    return false
   end
 
   def update_doc(row)

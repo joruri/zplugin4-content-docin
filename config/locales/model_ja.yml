@@ -51,6 +51,8 @@ ja:
         default_state: デフォルトの記事ステータス
         enable_marker: 強制的に地図に表示
         data_text_id: 件数表示テキスト
+        skip_category: 登録をスキップする項目
+        close_category: 非公開として登録する項目
   active_hash:
     attributes:
       docin/content/setting_menu/title:

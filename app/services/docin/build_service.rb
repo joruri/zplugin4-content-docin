@@ -13,6 +13,7 @@ class Docin::BuildService < ApplicationService
     @body_template = Erubis::Eruby.new(@content.body_template)
     @summary_template = Erubis::Eruby.new(@content.summary_template)
     @dictionary = @content.column_replace_dictionary
+    @close_category = @content.close_category
   end
 
   def build(row, doc: nil)
@@ -60,6 +61,9 @@ class Docin::BuildService < ApplicationService
     else
       build_file_in_import(doc, row)
     end
+
+    # close
+    doc.state = build_close_state(doc, row) if @close_category.present?
 
     doc.in_ignore_accessibility_check = '1'
     doc.in_ignore_link_check = '1'
@@ -316,6 +320,16 @@ class Docin::BuildService < ApplicationService
     else
       doc.files.each { |file| file.mark_for_destruction }
     end
+  end
+
+  def build_close_state(doc, row)
+    data = row.data.dup
+    data.each_entry do |key|
+      next if key.blank?
+      next if @close_category[key[0]].blank?
+      return 'closed' if @close_category[key[0]].include?(data[key[0]].to_s)
+    end
+    return doc.state
   end
 
 end
