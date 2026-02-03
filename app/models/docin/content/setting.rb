@@ -4,6 +4,7 @@ class Docin::Content::Setting < Cms::ContentSetting
   attr_json :gp_article_content_id, :integer
   attr_json :body_template, :string
   attr_json :summary_template, :string
+  attr_json :doc_name_prefix, :string
   attr_json :default_state, :string, enum: [:draft, :public], default: :draft
   attr_json :enable_marker, :integer, enum: [0, 1], default: 1
   attr_json :data_text_id, :integer

@@ -4,6 +4,7 @@ class Docin::Content::SettingField < Cms::Content::SettingField
     add_item :gp_article_content_id, :select
     add_item :body_template, :text_area
     add_item :summary_template, :text_area
+    add_item :doc_name_prefix, :text
     add_item :default_state, :radio
     add_item :enable_marker, :radio
     add_item :data_text_id, :select

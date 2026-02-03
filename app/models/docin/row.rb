@@ -18,7 +18,7 @@ class Docin::Row < ApplicationModel
   end
 
   def name
-    data[content.setting.doc_name]
+    "#{content.setting.doc_name_prefix}#{data[content.setting.doc_name]}"
   end
 
   def title

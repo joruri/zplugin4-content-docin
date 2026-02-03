@@ -11,6 +11,7 @@ ja:
         gp_article_content_id: コンテンツ
         body_template: 本文テンプレート
         summary_template: 概要テンプレート
+        doc_name_prefix: ディレクトリ名接頭辞
         import_path: CSVファイルパス
         import_user_id: 作成者ユーザー
         column_replace: カラム読み替え
