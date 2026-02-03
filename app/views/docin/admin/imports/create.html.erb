@@ -44,7 +44,7 @@
           <%- file = row.doc.files.reject { |file| file.marked_for_destruction? }.first -%>
           <tr>
             <td class="cms-list__url"><%= row.name %></td>
-            <td class="cms-list__status"><%= row.state_text %></td>
+            <td class="cms-list__status"><%= row.doc.state_text %></td>
             <td class="cms-list__title"><%= row.title %></td>
             <td class="cms-list__summary"><%= truncate row.doc&.summary %></td>
             <td class="cms-list__list-status"><%= row.feature_1_text %></td>

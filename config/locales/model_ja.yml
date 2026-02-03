@@ -11,6 +11,7 @@ ja:
         gp_article_content_id: コンテンツ
         body_template: 本文テンプレート
         summary_template: 概要テンプレート
+        doc_name_prefix: ディレクトリ名接頭辞
         import_path: CSVファイルパス
         import_user_id: 作成者ユーザー
         column_replace: カラム読み替え
@@ -21,6 +22,7 @@ ja:
         doc_name: ディレクトリ名
         doc_state: ステータス
         title: タイトル
+        title_suffix: タイトル補足
         summary: 概要
         feature_1: 記事一覧表示
         feed_state: 記事フィード表示
@@ -51,6 +53,8 @@ ja:
         default_state: デフォルトの記事ステータス
         enable_marker: 強制的に地図に表示
         data_text_id: 件数表示テキスト
+        skip_category: 登録をスキップする項目
+        close_category: 非公開として登録する項目
   active_hash:
     attributes:
       docin/content/setting_menu/title:

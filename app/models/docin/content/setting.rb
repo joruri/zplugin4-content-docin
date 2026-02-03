@@ -4,6 +4,7 @@ class Docin::Content::Setting < Cms::ContentSetting
   attr_json :gp_article_content_id, :integer
   attr_json :body_template, :string
   attr_json :summary_template, :string
+  attr_json :doc_name_prefix, :string
   attr_json :default_state, :string, enum: [:draft, :public], default: :draft
   attr_json :enable_marker, :integer, enum: [0, 1], default: 1
   attr_json :data_text_id, :integer
@@ -14,12 +15,15 @@ class Docin::Content::Setting < Cms::ContentSetting
   attr_json :column_replace, :text
   attr_json :category_relation, :text
   attr_json :category_relation_type, :integer, enum: [0, 1], default: 1
+  attr_json :skip_category, :text
+  attr_json :close_category, :text
   attr_json :attachement_column, :string
   attr_json :attachement_directory, :string
 
   attr_json :doc_name, :string, default: "ディレクトリ名"
   attr_json :doc_state, :string, default: "ステータス"
   attr_json :title, :string, default: "タイトル"
+  attr_json :title_suffix, :string, default: "タイトル補足"
   attr_json :feature_1, :string, default: "記事一覧表示"
   attr_json :feed_state, :string, default: "記事フィード表示"
   attr_json :display_published_at, :string, default: "公開日（表示用）"
