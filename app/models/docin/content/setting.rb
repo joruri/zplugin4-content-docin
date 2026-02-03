@@ -22,6 +22,7 @@ class Docin::Content::Setting < Cms::ContentSetting
   attr_json :doc_name, :string, default: "ディレクトリ名"
   attr_json :doc_state, :string, default: "ステータス"
   attr_json :title, :string, default: "タイトル"
+  attr_json :title_suffix, :string, default: "タイトル補足"
   attr_json :feature_1, :string, default: "記事一覧表示"
   attr_json :feed_state, :string, default: "記事フィード表示"
   attr_json :display_published_at, :string, default: "公開日（表示用）"

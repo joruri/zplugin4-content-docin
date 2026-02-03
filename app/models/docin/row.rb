@@ -22,7 +22,9 @@ class Docin::Row < ApplicationModel
   end
 
   def title
-    data[content.setting.title]
+    ret = data[content.setting.title]
+    ret += "/#{data[content.setting.title_suffix]}" if ret.present? && data[content.setting.title_suffix].present?
+    ret
   end
 
   def category_titles_from_category_type_title(category_type_title)

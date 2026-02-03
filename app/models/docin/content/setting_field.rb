@@ -13,6 +13,7 @@ class Docin::Content::SettingField < Cms::Content::SettingField
     add_item :doc_name, :text
     add_item :doc_state, :text
     add_item :title, :text
+    add_item :title_suffix, :text
     add_item :feature_1, :text
     add_item :feed_state, :text
     add_item :display_published_at, :text
