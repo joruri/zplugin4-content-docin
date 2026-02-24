@@ -34,6 +34,10 @@ class Docin::Content::Import < Cms::Content
     @doc_name_prefix
   end
 
+  def skip_close
+    setting.skip_close == 'enabled'
+  end
+
   def skip_category
     return @skip_category if @skip_category.present?
     @skip_category = {}
