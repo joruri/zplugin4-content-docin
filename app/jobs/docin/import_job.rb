@@ -26,10 +26,12 @@ class Docin::ImportJob < Sys::ProcessJob
       end
     end
 
-    doc_ids.each_slice(500) do |partial_doc_ids|
-      GpArticle::Doc.where(id: partial_doc_ids).update_all(state: 'closed')
-      docs = GpArticle::Doc.where(id: partial_doc_ids)
-      Cms::PublishersJob.perform_later(content.site, publications: docs.flat_map(&:publications))
+    unless content.skip_close
+      doc_ids.each_slice(500) do |partial_doc_ids|
+        GpArticle::Doc.where(id: partial_doc_ids).update_all(state: 'closed')
+        docs = GpArticle::Doc.where(id: partial_doc_ids)
+        Cms::PublishersJob.perform_later(content.site, publications: docs.flat_map(&:publications))
+      end
     end
 
     if data_text = content.data_text

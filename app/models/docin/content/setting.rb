@@ -8,6 +8,7 @@ class Docin::Content::Setting < Cms::ContentSetting
   attr_json :default_state, :string, enum: [:draft, :public], default: :draft
   attr_json :enable_marker, :integer, enum: [0, 1], default: 1
   attr_json :data_text_id, :integer
+  attr_json :skip_close, :string, enum: [:disabled, :enabled], default: :disabled
 
   attr_json :template_values, ActiveModel::Type::Value.new, default: {}
   attr_json :import_path, :string
