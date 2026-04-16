@@ -33,6 +33,11 @@ class Docin::ImportJob < Sys::ProcessJob
         Cms::PublishersJob.perform_later(content.site, publicators: docs.flat_map(&:publications))
       end
     end
+
+    if data_text = content.data_text
+      data_text.body = content.gp_article_content.public_docs.count
+      data_text.save
+    end
   end
 
   private

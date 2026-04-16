@@ -8,6 +8,7 @@ class Docin::Content::SettingField < Cms::Content::SettingField
     add_item :enable_marker, :radio
     add_item :doc_name_prefix, :text
     add_item :skip_close, :radio
+    add_item :data_text_id, :select
   end
 
   menu :columns do
