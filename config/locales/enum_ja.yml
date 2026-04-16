@@ -10,3 +10,6 @@ ja:
       enable_marker:
         0: 無効
         1: 有効
+      skip_close:
+        disabled: しない
+        enabled: する

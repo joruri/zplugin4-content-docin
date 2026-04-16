@@ -50,6 +50,11 @@ ja:
         file_image_resize: 画像リサイズ
         default_state: デフォルトの記事ステータス
         enable_marker: 強制的に地図に表示
+        doc_name_prefix: ディレクトリ名接頭辞
+        title_suffix: タイトル補足
+        skip_category: 登録をスキップする項目
+        close_category: 非公開として登録する項目
+        skip_close: 非公開処理をスキップ
   active_hash:
     attributes:
       docin/content/setting_menu/title:

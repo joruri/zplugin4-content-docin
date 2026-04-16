@@ -20,19 +20,33 @@ class Docin::ImportJob < Sys::ProcessJob
     script.total! rows.size
     rows.each do |row|
       script.progress! row do
+        next if skip_category(row, content)
         doc_ids.reject!{|doc_id| doc_id == row&.doc&.id }
         update_doc(row)
       end
     end
 
-    doc_ids.each_slice(500) do |partial_doc_ids|
-      GpArticle::Doc.where(id: partial_doc_ids).update_all(state: 'closed')
-      docs = GpArticle::Doc.where(id: partial_doc_ids)
-      Cms::PublishersJob.perform_later(content.site, publicators: docs.flat_map(&:publications))
+    unless content.skip_close
+      doc_ids.each_slice(500) do |partial_doc_ids|
+        GpArticle::Doc.where(id: partial_doc_ids).update_all(state: 'closed')
+        docs = GpArticle::Doc.where(id: partial_doc_ids)
+        Cms::PublishersJob.perform_later(content.site, publicators: docs.flat_map(&:publications))
+      end
     end
   end
 
   private
+
+  def skip_category(row, content)
+    return false if content.skip_category.blank?
+    data = row.data.dup
+    data.each_entry do |key|
+      next if key.blank?
+      next if content.skip_category[key[0]].blank?
+      return true if content.skip_category[key[0]].include?(data[key[0]])
+    end
+    return false
+  end
 
   def load_docs(content)
     content.gp_article_content.docs

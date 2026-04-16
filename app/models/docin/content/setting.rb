@@ -45,6 +45,12 @@ class Docin::Content::Setting < Cms::ContentSetting
   attr_json :file_alt_text, :string, default: "代替テキスト"
   attr_json :file_image_resize, :string, default: "画像リサイズ"
 
+  attr_json :doc_name_prefix, :string
+  attr_json :skip_category, :text
+  attr_json :close_category, :text
+  attr_json :title_suffix, :string, default: "タイトル補足"
+  attr_json :skip_close, :string, enum: [:disabled, :enabled], default: :disabled
+
   attr_json_belongs_to :gp_article_content, class_name: 'GpArticle::Content::Doc'
   attr_json_belongs_to :import_user, class_name: 'Sys::User'
 
