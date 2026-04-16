@@ -6,7 +6,7 @@
 
 | zplugin-content-docin | zomeki | joruri |
 | ---- | ---- | ---- |
-| 4.0 | - | 2020 Release 4 |
+| 5.0 | - | 2020 Release 5 |
 
 ## インストール
 

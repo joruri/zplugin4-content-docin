@@ -28,7 +28,7 @@ class Docin::ImportJob < Sys::ProcessJob
     doc_ids.each_slice(500) do |partial_doc_ids|
       GpArticle::Doc.where(id: partial_doc_ids).update_all(state: 'closed')
       docs = GpArticle::Doc.where(id: partial_doc_ids)
-      Cms::PublishersJob.perform_later(content.site, publications: docs.flat_map(&:publications))
+      Cms::PublishersJob.perform_later(content.site, publicators: docs.flat_map(&:publications))
     end
   end
 
