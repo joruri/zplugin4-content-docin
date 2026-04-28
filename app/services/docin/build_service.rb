@@ -17,12 +17,14 @@ class Docin::BuildService < ApplicationService
   end
 
   def build(row, doc: nil)
+    row.data = replace_data(row)
+
     doc ||= @dest_content.docs.where(name: row.name).first_or_initialize
 
     doc.state = row.state
     doc.title = row.title
-    doc.body = @body_template.evaluate(data: replace_data(row))
-    doc.summary = @summary_template.evaluate(data: replace_data(row))
+    doc.body = @body_template.evaluate(data: row.data)
+    doc.summary = @summary_template.evaluate(data: row.data)
     doc.concept = @dest_content.concept
     doc.display_updated_at = row.display_updated_at unless row.display_updated_at.nil?
     doc.display_published_at = row.display_published_at unless row.display_published_at.nil?
