@@ -72,7 +72,7 @@
             <td class="core-list__file-resize"><%= file&.image_resize %></td>
             <td class="core-list__title">
               <%- if row.doc.errors.present? -%>
-                <span class="note"><%=hbr row.doc.errors.full_messages.to_a.join("\n") -%></span>
+                <span class="util-alert"><%=hbr row.doc.errors.full_messages.to_a.join("\n") -%></span>
               <%- end -%>
             </td>
           </tr>
