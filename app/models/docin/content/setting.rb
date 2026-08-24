@@ -45,11 +45,24 @@ class Docin::Content::Setting < Cms::ContentSetting
   attr_json :file_alt_text, :string, default: "代替テキスト"
   attr_json :file_image_resize, :string, default: "画像リサイズ"
 
+  attr_json :doc_name_prefix, :string
+  attr_json :skip_category, :text
+  attr_json :close_category, :text
+  attr_json :title_suffix, :string, default: "タイトル補足"
+  attr_json :skip_close, :string, enum: [:disabled, :enabled], default: :disabled
+
+  attr_json :data_text_id, :integer
+
   attr_json_belongs_to :gp_article_content, class_name: 'GpArticle::Content::Doc'
   attr_json_belongs_to :import_user, class_name: 'Sys::User'
+  attr_json_belongs_to :data_text, class_name: 'Cms::DataText'
 
   def gp_article_content_id_text
     gp_article_content&.name
+  end
+
+  def data_text_id_text
+    data_text&.title
   end
 
   def import_user_id_text
@@ -69,6 +82,10 @@ class Docin::Content::Setting < Cms::ContentSetting
   class << self
     def gp_article_content_id_options(options = {})
       GpArticle::Content::Doc.in_site(options[:site]).map { |c| [c.name, c.id] }
+    end
+
+    def data_text_id_options(options = {})
+      Cms::DataText.in_site(options[:site]).map { |c| [c.title, c.id] }
     end
 
     def import_user_id_options(options = {})

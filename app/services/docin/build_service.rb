@@ -13,15 +13,18 @@ class Docin::BuildService < ApplicationService
     @body_template = Erubis::Eruby.new(@content.body_template)
     @summary_template = Erubis::Eruby.new(@content.summary_template)
     @dictionary = @content.column_replace_dictionary
+    @close_category = @content.close_category
   end
 
   def build(row, doc: nil)
+    row.data = replace_data(row)
+
     doc ||= @dest_content.docs.where(name: row.name).first_or_initialize
 
     doc.state = row.state
     doc.title = row.title
-    doc.body = @body_template.evaluate(data: replace_data(row))
-    doc.summary = @summary_template.evaluate(data: replace_data(row))
+    doc.body = @body_template.evaluate(data: row.data)
+    doc.summary = @summary_template.evaluate(data: row.data)
     doc.concept = @dest_content.concept
     doc.display_updated_at = row.display_updated_at unless row.display_updated_at.nil?
     doc.display_published_at = row.display_published_at unless row.display_published_at.nil?
@@ -60,9 +63,8 @@ class Docin::BuildService < ApplicationService
     else
       build_file_in_import(doc, row)
     end
-
-    doc.in_ignore_accessibility_check = '1'
-    doc.in_ignore_link_check = '1'
+    # close
+    doc.state = build_close_state(doc, row) if @close_category.present?
 
     doc
   end
@@ -316,6 +318,16 @@ class Docin::BuildService < ApplicationService
     else
       doc.files.each { |file| file.mark_for_destruction }
     end
+  end
+
+  def build_close_state(doc, row)
+    data = row.data.dup
+    data.each_entry do |key|
+      next if key.blank?
+      next if @close_category[key[0]].blank?
+      return 'closed' if @close_category[key[0]].include?(data[key[0]].to_s)
+    end
+    return doc.state
   end
 
 end

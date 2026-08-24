@@ -44,7 +44,7 @@
           <%- file = row.doc.files.reject { |file| file.marked_for_destruction? }.first -%>
           <tr>
             <td class="core-list__url"><%= row.name %></td>
-            <td class="core-list__status"><%= row.state_text %></td>
+            <td class="cms-list__status"><%= row.doc.state_text %></td>
             <td class="core-list__title"><%= row.title %></td>
             <td class="core-list__summary"><%= truncate row.doc&.summary %></td>
             <td class="core-list__list-status"><%= row.feature_1_text %></td>
@@ -72,7 +72,7 @@
             <td class="core-list__file-resize"><%= file&.image_resize %></td>
             <td class="core-list__title">
               <%- if row.doc.errors.present? -%>
-                <span class="note"><%=hbr row.doc.errors.full_messages.to_a.join("\n") -%></span>
+                <span class="util-alert"><%=hbr row.doc.errors.full_messages.to_a.join("\n") -%></span>
               <%- end -%>
             </td>
           </tr>
@@ -83,7 +83,7 @@
 
   <%- unless @rows.any? { |row| row.doc.errors.present? } -%>
     <%= f.hidden_field :csv, value: @csv %>
-    <div class="cms-submitters">
+    <div class="core-submitters">
       <%= f.submit :register, data: { confirm: '登録してよろしいですか？' } %>
     </div>
   <%- end -%>

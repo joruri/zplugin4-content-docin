@@ -6,12 +6,16 @@ class Docin::Content::SettingField < Cms::Content::SettingField
     add_item :summary_template, :text_area
     add_item :default_state, :radio
     add_item :enable_marker, :radio
+    add_item :doc_name_prefix, :text
+    add_item :skip_close, :radio
+    add_item :data_text_id, :select
   end
 
   menu :columns do
     add_item :doc_name, :text
     add_item :doc_state, :text
     add_item :title, :text
+    add_item :title_suffix, :text
     add_item :feature_1, :text
     add_item :feed_state, :text
     add_item :display_published_at, :text
@@ -49,6 +53,8 @@ class Docin::Content::SettingField < Cms::Content::SettingField
     add_item :column_replace, :text_area, lower_text: '対象カラム,値,変換先'
     add_item :category_relation, :text_area, lower_text: '対象カラム,カテゴリ種別'
     add_item :category_relation_type, :radio
+    add_item :skip_category, :text_area, lower_text: '対象カラム,値'
+    add_item :close_category, :text_area, lower_text: '対象カラム,値'
     add_item :attachement_column, :text
     add_item :attachement_directory, :text
   end

@@ -18,11 +18,13 @@ class Docin::Row < ApplicationModel
   end
 
   def name
-    data[content.setting.doc_name]
+    "#{content.doc_name_prefix}#{data[content.setting.doc_name]}"
   end
 
   def title
-    data[content.setting.title]
+    ret = data[content.setting.title]
+    ret += "/#{data[content.setting.title_suffix]}" if ret.present? && data[content.setting.title_suffix].present?
+    ret
   end
 
   def category_titles_from_category_type_title(category_type_title)
@@ -226,10 +228,10 @@ class Docin::Row < ApplicationModel
     doc.validate
 
     if doc.name.blank?
-      doc.errors.add(:base, "#{NAME}を入力してください")
+      doc.errors.add(:base, "#{content.setting.doc_name}を入力してください")
     end
     if doc.state_closed? && doc.state_was == 'draft'
-      doc.errors.add(:base, "#{STATE}は下書きから公開終了に変更できません")
+      doc.errors.add(:base, "#{content.setting.doc_state}は下書きから公開終了に変更できません")
     end
   end
 
