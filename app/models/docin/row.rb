@@ -228,10 +228,10 @@ class Docin::Row < ApplicationModel
     doc.validate
 
     if doc.name.blank?
-      doc.errors.add(:base, "#{NAME}を入力してください")
+      doc.errors.add(:base, "#{content.setting.doc_name}を入力してください")
     end
     if doc.state_closed? && doc.state_was == 'draft'
-      doc.errors.add(:base, "#{STATE}は下書きから公開終了に変更できません")
+      doc.errors.add(:base, "#{content.setting.doc_state}は下書きから公開終了に変更できません")
     end
   end
 
